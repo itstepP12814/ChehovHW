@@ -1,0 +1,33 @@
+#################
+## openFrameworks
+#################
+[Bb]in/*
+![Bb]in/data/
+[Bb]uild/
+[Oo]bj/
+[Oo]bj/Debug/
+[Dd]ebug*/
+[Rr]elease*/
+*.mode*
+*.app/
+*.pyc
+*.log
+#################
+## Code::Blocks
+#################
+*.depend
+*.layout
+*.o
+obj/
+bin/
+##############################
+#Просто файлы, которые я не хочу пушить на гит
+##############################
+.directory
+############
+## Windows
+############
+# Windows image file caches
+Thumbs.db
+# Folder config file
+Desktop.ini

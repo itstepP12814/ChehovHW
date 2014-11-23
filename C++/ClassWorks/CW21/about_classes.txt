@@ -1,0 +1,48 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Mammal{ //абстрактный общий родительский класс
+   // public:
+      protected:
+        string name; //поле недоступно извне
+      public:
+        void voice();
+        Mammal (string n); //вызываем констуктор
+        string getName() {return name;} //делаем функцию для отображения имени при доступе извне для name
+        void setName(string newName) {name = newName;}
+};
+
+class Cat:public Mammal{
+    public:
+        Cat(string n):Mammal(n){ //:Mammal (n) вызывает конструктор Mammal
+            cout << n << " is a cat \n";
+        }
+        void voice(){
+            cout << "Cat" << name << " says Meow!\n";
+        }
+};
+
+void Mammal::voice(){
+    cout << name << " says Yo!\n";
+
+}
+
+Mammal::Mammal(string n){ //обьявление конструктора
+    name = n;
+}
+
+int main()
+{
+    //Mammal x;
+    Mammal x("Grey"); //Здесь мы создаем переменную классу, и передаем аргументы, т.к. это спрашивает
+    cout << x.getName()<<endl;
+    //x.name = "Grey";
+    x.voice();
+    x.setName("FatBoy");
+    x.voice();
+    Cat y("Thomas");
+    y.voice();
+    return 0;
+}
+//Добавить класс "собака"
