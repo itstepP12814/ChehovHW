@@ -1,6 +1,7 @@
 #include "String.h"
 #include <iostream>
 #include <cstring>
+#include <stdlib.h>
 using namespace std;
 String::String()
 {
