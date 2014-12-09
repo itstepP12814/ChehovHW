@@ -13,13 +13,18 @@ int main() {
     B.getTimeUs();
     MyTime C;
     C=A+B;
+    cout<<"t1 + t2"<<endl;
     C.getTimeEu();
-    C=A-B;
+    C=B-A;
+    cout<<"t1 - t2"<<endl;
     C.getTimeEu();
     C=A;
+    cout<<"t1=t2"<<endl;
     C.getTimeEu();
-    if(C==A){
-    cout<<"=="<<endl;
+    MyTime E(B);
+    B.getTimeEu();
+    if(C==A) {
+        cout<<"=="<<endl;
     }
     MyTime D;
     D.convert("6:12:18 pm");

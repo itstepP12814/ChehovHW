@@ -2,7 +2,6 @@
 #include <cstring>
 #include <stdlib.h>
 MyTime::MyTime() {
-    mytime=new mytm;
     t=time(NULL);
     aTm=localtime(&t);
     mytime=new mytm;
@@ -12,17 +11,26 @@ MyTime::MyTime() {
     //ctor
 }
 MyTime::MyTime(char* str) {
-	mytime=new mytm;
-	setTime(str);
+    mytime=new mytm;
+    setTime(str);
 }
 MyTime ::MyTime(MyTime& t1) {
-    MyTime* t2=new MyTime;
-    t2->mytime->hour=t1.mytime->hour;
-    t2->mytime->min=t1.mytime->min;
-    t2->mytime->sec=t1.mytime->sec;
+    cout<<"copy constructor\n";
+    t=NULL;
+    aTm=NULL;
+    mytime=new mytm;
+    mytime->hour=t1.mytime->hour;
+    mytime->min=t1.mytime->min;
+    mytime->sec=t1.mytime->sec;
 }
 MyTime::~MyTime() {
     //dtor
+}
+void MyTime::operator=(const MyTime& t1) {
+    cout<<"operator=\n";
+    this->mytime->hour=t1.mytime->hour;
+    this->mytime->min=t1.mytime->min;
+    this->mytime->sec=t1.mytime->sec;
 }
 void MyTime::getTimeEu()const {
     printf("%02d:%02d:%02d \n", mytime->hour, mytime->min, mytime->sec);

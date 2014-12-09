@@ -19,6 +19,7 @@ public:
     void getTimeUs() const;
     void convert(char*);
     void setTime(char*);
+    void operator=(const MyTime&);
     MyTime operator+(const MyTime&) const;
     MyTime operator-(const MyTime&) const;
     int operator==(const MyTime&) const;
