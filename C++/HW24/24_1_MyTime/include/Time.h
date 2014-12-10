@@ -13,7 +13,7 @@ class MyTime {
 public:
     MyTime();
     MyTime(char*);
-    MyTime(MyTime&);
+    MyTime(const MyTime&);
     virtual ~MyTime();
     void getTimeEu() const;
     void getTimeUs() const;

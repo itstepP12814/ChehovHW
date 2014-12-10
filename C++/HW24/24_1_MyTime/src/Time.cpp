@@ -14,7 +14,7 @@ MyTime::MyTime(char* str) {
     mytime=new mytm;
     setTime(str);
 }
-MyTime ::MyTime(MyTime& t1) {
+MyTime ::MyTime(const MyTime& t1) {
     cout<<"copy constructor\n";
     t=NULL;
     aTm=NULL;
