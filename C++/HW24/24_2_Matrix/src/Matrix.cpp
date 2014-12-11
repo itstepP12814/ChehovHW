@@ -6,7 +6,7 @@ Matrix::Matrix() {
     //ctor
 }
 Matrix::Matrix(const Matrix& m1) {
-    cout<< "copy constr"<<endl;
+    cout<< "copy constr" <<endl;
     lin=m1.lin;
     col=m1.col;
     m_ptr=new int* [lin];
@@ -95,11 +95,13 @@ Matrix Matrix::operator*(const Matrix& m1) const {
 }
 void Matrix::operator=(const Matrix& m1) {
     cout<< "operator=" <<endl;
-    //Удаление предыдущей матрицы
-    for(int i=0; i<lin; ++i) {
-        delete m_ptr[i];
+    //Удаление предыдущей матрицы если под нее была выделена память
+    if(m_ptr!=NULL) {
+        for(int i=0; i<lin; ++i) {
+            delete []m_ptr[i];
+        }
+        delete []m_ptr;
     }
-    delete []m_ptr;
     //переписка данных
     lin=m1.lin;
     col=m1.col;
