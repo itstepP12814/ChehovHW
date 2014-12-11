@@ -7,22 +7,22 @@ using namespace std;
 Необходимо перегрузить соответствующие операторы.*/
 int main() {
     cout << "matrix A" <<endl;
-    Matrix A(5,5);
+    Matrix A(5,3);
     A.showMatrix();
-    cout << "matrix A" <<endl;
-    Matrix B(5,5);
+    cout << "matrix B" <<endl;
+    Matrix B(5,3);
     B.showMatrix();
-    Matrix C(5,5);
-    cout<< "+" <<endl;
+    Matrix C(5,3);
+    cout<< "A+B" <<endl;
     C=A+B;
     C.showMatrix();
     cout<< "matrix C=A" <<endl;
     C=A;
     C.showMatrix();
-    cout<< "-" <<endl;//т.к матрицы созданы в одну и ту же секунду, при их вычитании должна получиться матрица с нулями
+    cout<< "A-B" <<endl;//т.к матрицы созданы в одну и ту же секунду, при их вычитании должна получиться матрица с нулями
     C=A-B;
     C.showMatrix();
-    cout << "*" <<endl;
+    cout << "A*B" <<endl;
     C=A*B;
     C.showMatrix();
     cout<< "get element (1,2)" <<endl;

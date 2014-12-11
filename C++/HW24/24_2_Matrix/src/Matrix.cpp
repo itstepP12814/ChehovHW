@@ -95,44 +95,55 @@ Matrix Matrix::operator*(const Matrix& m1) const {
 }
 void Matrix::operator=(const Matrix& m1) {
     cout<< "operator=" <<endl;
-    //Удаление предыдущей матрицы если под нее была выделена память
-    if(m_ptr!=NULL) {
-        for(int i=0; i<lin; ++i) {
-            delete []m_ptr[i];
+    if(m1.lin==this->lin&&m1.col==this->col) {
+        lin=m1.lin;
+        col=m1.col;
+        resize(lin, lin, col, m_ptr);
+        for(int i=0 ; i<lin; ++i) {
+            for(int j=0; j<col; ++j) {
+                m_ptr[i][j]=m1.m_ptr[i][j];
+            }
         }
-        delete []m_ptr;
-    }
-    //переписка данных
-    lin=m1.lin;
-    col=m1.col;
-    //выделение памяти под новую
-    m_ptr=new int* [lin];
-    //создание новой матрицы
-    for(int i=0; i<lin; ++i) {
-        m_ptr[i]=new int [col];
-    }
-    for(int i=0 ; i<lin; ++i) {
-        for(int j=0; j<col; ++j) {
-            m_ptr[i][j]=m1.m_ptr[i][j];
-        }
+    } else {
+        cout<< "error configuration in operator =" <<endl;
     }
 }
 void Matrix::transpMatrix() {
-    if(lin==col) {
-        Matrix m(lin, col);
-        m=*this;
+    if(m_ptr!=NULL) {
+        int temp;
+        Matrix temp_m(*this);//cоздание временной копии исходной матрицы
+        resize(lin, col, lin, m_ptr);//изменяем конфигурацию исходной матрицы на зеркальную
+        temp=lin;
+        lin=col;
+        col=temp;
+        //(*this).showMatrix();
         for(int i=0; i<lin; ++i) {
             for(int j=0; j<col; ++j) {
-                this->m_ptr[j][i]=m.m_ptr[i][j];
+                this->m_ptr[i][j]=temp_m.m_ptr[j][i];
             }
         }
     } else {
         Matrix trash;
         cout<< "error" <<endl;
     }
-
 }
-
+void Matrix:: resize(int prev_lin, int new_lin, int new_col, int** m_ptr) {
+    //метод удаляет все данные по указателю, из выделенной области памяти, а затем переразмечает область памяти
+    //адресуясь все к тому же указателю, копия которого была передана в качестве аргумента
+    //грубо говоря мы меняем конфигурацию оригинальной матрицы переданной нам по указателю, при этом в ячейках будет лежать мусор
+    if(m_ptr!=NULL) {
+        for(int i=0; i<prev_lin; ++i) {
+            delete []m_ptr[i];
+        }
+        delete []m_ptr;
+    }
+    //выделение памяти под новую матрицу
+    m_ptr=new int* [new_lin];
+    //создание новой матрицы
+    for(int i=0; i<new_lin; ++i) {
+        m_ptr[i]=new int [new_col];
+    }
+}
 int Matrix::getElement (int l, int c)const {
     return m_ptr[l][c];
 }
