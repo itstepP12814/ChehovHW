@@ -11,7 +11,12 @@ public:
     Matrix(const Matrix&);
     Matrix(int l, int c);
     Matrix operator+(const Matrix&)const;
+    Matrix operator-(const Matrix&)const;
+    Matrix operator*(const Matrix&)const;
+    int getElement(int, int)const;
+    void transpMatrix();
     void operator=(const Matrix&);
+    void setElement(int, int, int);
     virtual ~Matrix();
     void showMatrix() const;
 protected:

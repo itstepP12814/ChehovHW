@@ -10,11 +10,11 @@ Matrix::Matrix(const Matrix& m1) {
     lin=m1.lin;
     col=m1.col;
     m_ptr=new int* [lin];
-     for(int i=0; i<lin; ++i) {
+    for(int i=0; i<lin; ++i) {
         m_ptr[i]=new int [col];//создание собственно самой матрицы
     }
-    for(int i=0; i<lin; ++i){
-        for(int j=0; j<col; ++j){
+    for(int i=0; i<lin; ++i) {
+        for(int j=0; j<col; ++j) {
             m_ptr[i][j]=m1.m_ptr[i][j];
         }
     }
@@ -41,7 +41,7 @@ Matrix::~Matrix() {
 void Matrix::showMatrix()const {
     for(int i=0; i<lin; ++i) {
         for(int j=0; j<col; ++j) {
-            cout<<m_ptr[i][j];
+            cout<<m_ptr[i][j]<<"|";
         }
         cout<<endl;
     }
@@ -59,7 +59,37 @@ Matrix Matrix::operator+(const Matrix& m1) const {
         }
         return m2;
     } else {
-        cout<< "\tError size of matrix\n";
+        cout<< "\tError matrix configuration\n";
+        return trash;
+    }
+}
+Matrix Matrix::operator-(const Matrix& m1) const {
+    Matrix trash;
+    if(m1.lin==this->lin&&m1.col==this->col) {
+        Matrix m2(this->lin, this->col);
+        for(int i=0; i<this->lin; ++i) {
+            for(int j=0; j<this->col; ++j) {
+                m2.m_ptr[i][j]=this->m_ptr[i][j]-m1.m_ptr[i][j];
+            }
+        }
+        return m2;
+    } else {
+        cout<< "\tError matrix configuration\n";
+        return trash;
+    }
+}
+Matrix Matrix::operator*(const Matrix& m1) const {
+    Matrix trash;
+    if(m1.lin==this->lin&&m1.col==this->col) {
+        Matrix m2(this->lin, this->col);
+        for(int i=0; i<this->lin; ++i) {
+            for(int j=0; j<this->col; ++j) {
+                m2.m_ptr[i][j]=this->m_ptr[i][j]*m1.m_ptr[i][j];
+            }
+        }
+        return m2;
+    } else {
+        cout<< "\tError matrix configuration\n";
         return trash;
     }
 }
@@ -84,4 +114,26 @@ void Matrix::operator=(const Matrix& m1) {
             m_ptr[i][j]=m1.m_ptr[i][j];
         }
     }
+}
+void Matrix::transpMatrix() {
+    if(lin==col) {
+        Matrix m(lin, col);
+        m=*this;
+        for(int i=0; i<lin; ++i) {
+            for(int j=0; j<col; ++j) {
+                this->m_ptr[j][i]=m.m_ptr[i][j];
+            }
+        }
+    } else {
+        Matrix trash;
+        cout<< "error" <<endl;
+    }
+
+}
+
+int Matrix::getElement (int l, int c)const {
+    return m_ptr[l][c];
+}
+void Matrix::setElement(int l, int c, int value) {
+    m_ptr[l][c]=value;
 }
