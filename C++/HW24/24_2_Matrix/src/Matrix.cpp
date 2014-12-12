@@ -116,7 +116,6 @@ void Matrix::transpMatrix() {
         temp=lin;
         lin=col;
         col=temp;
-        //(*this).showMatrix();
         for(int i=0; i<lin; ++i) {
             for(int j=0; j<col; ++j) {
                 this->m_ptr[i][j]=temp_m.m_ptr[j][i];
