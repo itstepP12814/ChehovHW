@@ -122,7 +122,6 @@ void Matrix::transpMatrix() {
             }
         }
     } else {
-        Matrix trash;
         cout<< "error" <<endl;
     }
 }
