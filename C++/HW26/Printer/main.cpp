@@ -14,7 +14,7 @@ int main() {
     Client D(5, 14);
     Client E(7, 11);
     Client F(12, 12);
-    Printer P(10);
+    Printer P(3);
     P.setQueue(A);
     P.setQueue(C);
     P.setQueue(B);
@@ -22,6 +22,5 @@ int main() {
     P.setQueue(E);
     P.setQueue(F);
     P.print();
-    //P.setQueue(D);
     return 0;
 }
