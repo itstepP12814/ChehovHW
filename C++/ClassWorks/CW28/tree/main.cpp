@@ -2,8 +2,7 @@
 #include "Tree.h"
 using namespace std;
 
-int main()
-{
+int main() {
     cout << "Hello world!" << endl;
     return 0;
 }

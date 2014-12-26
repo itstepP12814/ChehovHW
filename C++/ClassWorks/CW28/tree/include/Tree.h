@@ -5,22 +5,22 @@
 using namespace std;
 
 
-struct item {
+struct Item {
     string val;
     int key;
-    item* left;
-    item* right;
-    item* next;
-    item* prev;
+    Item* left;
+    Item* right;
+    Item* next;
+    Item* prev;
 };
 
-class Tree
-{
-    public:
-        Tree();
-        virtual ~Tree();
-    protected:
-    item* root;
+class Tree {
+public:
+    Tree();
+    virtual ~Tree();
+    void addItem(int, string);
+protected:
+    Item* root;
 };
 
 #endif // TREE_H
