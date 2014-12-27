@@ -5,21 +5,40 @@
 using namespace std;
 
 
-struct Item {
-    string val;
-    int key;
-    Item* left;
-    Item* right;
-    Item* next;
-    Item* prev;
-};
-
-class Tree {
+class Tree
+{
 public:
     Tree();
     virtual ~Tree();
-    void addItem(int, string);
-protected:
+    int& operator[](const string&);
+    class Item;
+    class Iterator
+    {
+    public:
+        Iterator ():current(nullptr) {};
+        Iterator& operator++();
+        int& operator*();
+        bool operator==(const Iterator& another);
+        ~Iterator() {}
+    private:
+        Item** current;
+    };
+    Iterator begin(){
+    }
+    Iterator end() {return iterator(); }
+private:
+
+    class Item
+    {
+    public:
+        Item (const string& key_): left(nullptr), right(nullptr), key(key_) {}
+        ~Item() {}
+        const string key;
+        int value;
+        Item* left;
+        Item* right;
+    };
+
     Item* root;
 };
 

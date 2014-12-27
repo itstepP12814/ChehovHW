@@ -31,3 +31,13 @@ bin/
 Thumbs.db
 # Folder config file
 Desktop.ini
+#Windows Visual Stuio
+*.sdf
+*.dln
+*.sln
+*.suo
+*.opensdf
+*.exe
+*.pdb
+*.ilk
+*.filters
