@@ -5,31 +5,9 @@
 using namespace std;
 
 
-class Tree
-{
-public:
-    Tree();
-    virtual ~Tree();
-    int& operator[](const string&);
-    class Item;
-    class Iterator
-    {
-    public:
-        Iterator ():current(nullptr) {};
-        Iterator& operator++();
-        int& operator*();
-        bool operator==(const Iterator& another);
-        ~Iterator() {}
-    private:
-        Item** current;
-    };
-    Iterator begin(){
-    }
-    Iterator end() {return iterator(); }
+class Tree {
 private:
-
-    class Item
-    {
+    class Item {
     public:
         Item (const string& key_): left(nullptr), right(nullptr), key(key_) {}
         ~Item() {}
@@ -40,6 +18,26 @@ private:
     };
 
     Item* root;
+public:
+    Tree();
+    ~Tree();
+    int& operator[](const string&);
+
+    class Iterator {
+    public:
+        Iterator (): current(nullptr) {};
+        ///Iterator& operator++();
+        ///int& operator*();
+        ///bool operator==(const Iterator& another);
+        ~Iterator() {}
+    private:
+        Item* current;
+    };
+    Iterator begin() {
+    }
+    Iterator end() {
+        return Iterator();
+    }
 };
 
 #endif // TREE_H
