@@ -3,7 +3,7 @@
 #include <string.h>
 #include <iostream>
 using namespace std;
-
+///щрн яелокнбши мепюанвхи йнд, пюанвхи б оюойе я днлюьйюлх
 
 class Tree {
 private:

@@ -22,7 +22,7 @@ char Roll::rotateRoll(int count) {
 }
 void Roll::showRoll() const {
     for(int i=0; i<size; ++i) {
-        cout<< symb[i]<< " ";
+        //cout<< symb[i]<< " ";
     }
     cout<<endl;
 }
