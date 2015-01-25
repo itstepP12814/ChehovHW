@@ -17,18 +17,37 @@ int& Tree::operator[](const string& index) {
             return (*current)->value;
         }
         if(index<(*current)->key) {
-            cout<< "<" <<endl;
             current=&((*current)->left);
         } else {
-            cout<< ">" <<endl;
             current=&((*current)->right);
         }
     }
     (*current)=new Item(index);
-    cout<< "created "<< endl;
     size++;
     return (*current)->value;
 }
-void Tree::show() {
-
+void Tree::iterator() {
+    //попытка написать итератор
+    Item** current=&root;
+    Item** previous=&(*current);
+    while((*current)!=nullptr) {
+        if((*current)->left!=nullptr) {
+            previous=&(*current);
+            current=&((*current)->left);
+        } else {
+            cout<< (*current)->key<< " " << (*current)->value <<endl;
+            current=&(*previous);
+            if((*current)->right!=nullptr){
+                previous=&(*current);
+                current=&((*current)->right);
+            }
+        }
+    }
 }
+void Tree::showTree(Item* node){
+        if(node!=nullptr){
+            showTree(node->left);
+            cout << node->key << " " << node->value << endl;
+            showTree(node->right);
+        }
+    }

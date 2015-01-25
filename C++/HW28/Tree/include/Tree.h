@@ -1,7 +1,7 @@
 #ifndef TREE_H
 #define TREE_H
 #include <iostream>
-#include <string.h>
+#include <cstring>
 #include <cstdio>
 using namespace std;
 
@@ -29,7 +29,9 @@ public:
     Tree();
     ~Tree();
     int& operator[](const string&);
-    void show();
+    void iterator();
+    void showTree(Item*);
+    Item* getRoot(){return root;}
 };
 
 #endif // TREE_H
