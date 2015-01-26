@@ -10,7 +10,8 @@ public:
 	virtual ~Gai_tree();
 
 	struct Offence {
-		int speeding; int illegal_parking;
+		int speeding;
+		int illegal_parking;
 		int running_on_red;
 	};
 
@@ -29,5 +30,9 @@ public:
 	Car* root;
 	size_t size_of_tree;
 	Offence& operator[](const string& index);
+	void showTree(Car*);
+	Car* getRoot(){
+		return root;
+	}
 };
 
