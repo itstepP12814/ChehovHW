@@ -1,7 +1,6 @@
 #include <iostream>
 #include "Gai_tree.h"
 using namespace std;
-
 int main() {
 	Gai_tree A;
 	A["1230"] = { 8, 9, 6 };

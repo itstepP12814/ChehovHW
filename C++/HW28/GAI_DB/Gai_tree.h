@@ -8,13 +8,13 @@ class Gai_tree
 public:
 	Gai_tree();
 	virtual ~Gai_tree();
-	//структура билета со штрафом
+	//СЃС‚СЂСѓРєС‚СѓСЂР° Р±РёР»РµС‚Р° СЃРѕ С€С‚СЂР°С„РѕРј
 	struct Offence {
 		int speeding;
 		int illegal_parking;
 		int running_on_red;
 	};
-	//машина 
+	//РјР°С€РёРЅР° 
 	class Car{
 	public:
 		string number;
@@ -27,16 +27,16 @@ public:
 			delete rightCar;
 		}
 	};
-	size_t size_of_tree; //кол-во узлов
+	size_t size_of_tree; //РєРѕР»-РІРѕ СѓР·Р»РѕРІ
 	Offence& operator[](const string& index);
 	void showTree(Car*);
 	Car* search(const string&, Car*);
 	void searchDiapasone(const string&, const string&, Car*);
-	/*дружественные функции для печати и получения рутового узла, можно было сделать и как методы
-	но я хотел попрактиковаться с использованием областей видимости*/
+	/*РґСЂСѓР¶РµСЃС‚РІРµРЅРЅС‹Рµ С„СѓРЅРєС†РёРё РґР»СЏ РїРµС‡Р°С‚Рё Рё РїРѕР»СѓС‡РµРЅРёСЏ СЂСѓС‚РѕРІРѕРіРѕ СѓР·Р»Р°, РјРѕР¶РЅРѕ Р±С‹Р»Рѕ СЃРґРµР»Р°С‚СЊ Рё РєР°Рє РјРµС‚РѕРґС‹
+	РЅРѕ СЏ С…РѕС‚РµР» РїРѕРїСЂР°РєС‚РёРєРѕРІР°С‚СЊСЃСЏ СЃ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµРј РѕР±Р»Р°СЃС‚РµР№ РІРёРґРёРјРѕСЃС‚Рё*/
 	friend Car* getRoot(Gai_tree A);
 	friend void print(Car*);
 private:
-	Car* root;//самая первая нода
+	Car* root;//СЃР°РјР°СЏ РїРµСЂРІР°СЏ РЅРѕРґР°
 };
 
