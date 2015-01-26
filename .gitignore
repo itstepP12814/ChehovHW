@@ -34,7 +34,6 @@ Desktop.ini
 #Windows Visual Stuio
 *.sdf
 *.dln
-*.sln
 *.suo
 *.opensdf
 *.exe
