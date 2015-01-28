@@ -8,7 +8,7 @@ ContactTree::ContactTree() : root(NULL), sizeOfTree(0)
 ContactTree::~ContactTree()
 {
 }
-int& ContactTree::operator[](const int index){
+string& ContactTree::operator[](const string& index){
 	Subscriber** current = &root;
 	Subscriber* pr = NULL;
 	while ((*current) != NULL){
@@ -28,43 +28,29 @@ int& ContactTree::operator[](const int index){
 	++sizeOfTree;
 	return (*current)->number;
 }
-/*
-void ContactTree::editNumber(const string& index, const string& newNumber){
-	Subscriber** current = &root;
-	int checker = 0;
-	while ((*current) != NULL){
-		if ((*current)->name == index){
-			(*current)->number = newNumber;
-			checker = 1;
-			break;
+//изменение номера рекурсивное
+void ContactTree::editNumber(const string& index, const string& newNumber, Subscriber* node){
+	if (node!=NULL){
+		editNumber(index, newNumber, node->left);
+		if (node->name == index){
+			node->number = newNumber;
 		}
-		if (index < (*current)->name){
-			current = &((*current)->left);
-		}
-		else {
-			current = &((*current)->right);
-		}
+		editNumber(index, newNumber, node->right);
 	}
-	if (!checker) cout << "nothing found" << endl;
 }
-void ContactTree::editName(const string& index, const string& newName){
-	Subscriber** current = &root;
-	int checker = 0;
-	while ((*current) != NULL){
-		if ((*current)->name == index){
-			(*current)->name = newName;
-			checker = 1;
-			break;
+
+//изменение имени рекурсивное
+void ContactTree::editName(const string& index, const string& newName, Subscriber* node){
+	if (node!=NULL){
+		editName(index, newName, node->left);
+		if (node->name == index){
+			node->name = newName;
 		}
-		if (index < (*current)->name){
-			current = &((*current)->left);
-		}
-		else {
-			current = &((*current)->right);
-		}
+		editName(index, newName, node->right);
 	}
-	if (!checker) cout << "nothing found" << endl;
 }
+//надо придумать как сделать поиск по имени рекурсивным, это избавит нас от сложновтей в слуячае если имена изменены
+//поиск по имени бинарный,
 ContactTree::Subscriber* ContactTree::searchByName(const string& index){
 	Subscriber** current = &root;
 	int checker = 0;
@@ -88,6 +74,7 @@ ContactTree::Subscriber* ContactTree::searchByName(const string& index){
 	}
 	else return *current;
 }
+//поиск по номеру рекурсивный
 void ContactTree::searchByNumber(const string& num, Subscriber* node){
 	if (node != NULL){
 		searchByNumber(num, node->left);
@@ -98,7 +85,6 @@ void ContactTree::searchByNumber(const string& num, Subscriber* node){
 		searchByNumber(num, node->right);
 	}
 }
-*/
 
 void ContactTree::showFromLeft(Subscriber* node){
 	if (node != NULL){
@@ -150,32 +136,8 @@ ContactTree::Subscriber* ContactTree::prev(Subscriber* node){
 	else return NULL;
 }
 
-ContactTree::Subscriber* ContactTree::searchByName(const int index){
-	Subscriber** current = &root;
-	int checker = 0;
-	while ((*current) != NULL){
-		if ((*current)->name == index){
-			cout << "found!" << endl;
-			print(*current);
-			checker = 1;
-			return *current;
-		}
-		if (index < (*current)->name){
-			current = &((*current)->left);
-		}
-		else {
-			current = &((*current)->right);
-		}
-	}
-	if (!checker) {
-		cout << "nothing found" << endl;
-		return NULL;
-	}
-	else return *current;
-}
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void ContactTree::deleteContact(const int index){
+void ContactTree::deleteContact(const string& index){
 	//Важно понять что мы не удаляем структурно "удаляемый узел", мы перезаписываем значения в нем, но сохраняем связи
 
 	Subscriber* deletedContact = searchByName(index);//удаляемый контакт

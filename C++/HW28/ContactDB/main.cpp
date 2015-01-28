@@ -2,7 +2,7 @@
 
 int main(){
 	ContactTree A;
-	A[15] = 0;
+	/*A[15] = 0;
 	A[21] = 1;
 	A[9] = 2;
 	A[14] = 3;
@@ -18,14 +18,19 @@ int main(){
 	A[23] = 13;
 	A[29] = 14;
 	A[31] = 15;
-	A[42] = 16;
+	A[42] = 16;*/
+	A["pasha"] = "1254748";
+	A["dasha"] = "1264587";
+	A["glasha"] = "5843659";
+	A["sasha"] = "65459855";
+	A["chashbr"] = "5487845";
 
-	//A.editName("node5", "node6");
-	//A.editNumber("node6", "125848");
+	A.editName("glasha", "petrosyan", getRoot(&A));
+	A.editNumber("petrosyan", "125848", getRoot(&A));
 	//A.showFromLeft(getRoot(&A));
-	//A.searchByName("dasha");
-	//A.searchByNumber("50852468", getRoot(&A));
-	A.deleteContact(5);
+	//A.searchByName("dasha", getRoot(&A));
+	//A.searchByNumber("1254748", getRoot(&A));
+	//A.deleteContact("chashbr");
 	A.showFromLeft(getRoot(&A));
 	return 0;
 }
