@@ -18,19 +18,28 @@ int main(){
 	A[23] = 13;
 	A[29] = 14;
 	A[31] = 15;
-	A[42] = 16;*/
-	A["pasha"] = "1254748";
+	A[42] = 16;
+	//вставка с помощью оператора квадратных скобок
 	A["dasha"] = "1264587";
+	A["glasha"] = "5843659";
 	A["glasha"] = "5843659";
 	A["sasha"] = "65459855";
 	A["chashbr"] = "5487845";
+	*/
+	A.insert("pasha", "1254748");
+	A.insert("dasha", "1264587");
+	A.insert("glasha", "5843659");
+	A.insert("sasha", "65459855");
+	A.insert("chashbr", "5487845");
 
-	A.editName("glasha", "petrosyan", getRoot(&A));
-	A.editNumber("petrosyan", "125848", getRoot(&A));
-	//A.showFromLeft(getRoot(&A));
-	//A.searchByName("dasha", getRoot(&A));
-	//A.searchByNumber("1254748", getRoot(&A));
-	//A.deleteContact("chashbr");
-	A.showFromLeft(getRoot(&A));
+	A.editName("glasha", "petrosyan", getRoot(A));
+	A.editNumber("petrosyan", "125848", getRoot(A));
+	A.showFromLeft(getRoot(A));
+	A.searchByNumber("5487845", getRoot(A));
+	A.searchByName("dasha");
+	A.deleteContact("chashbr");
+	A.saveAtFile("save.txt","b");
+	A.readFromFile("save.txt");
+	A.showFromLeft(getRoot(A));
 	return 0;
 }

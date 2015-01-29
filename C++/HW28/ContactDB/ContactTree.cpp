@@ -28,9 +28,30 @@ string& ContactTree::operator[](const string& index){
 	++sizeOfTree;
 	return (*current)->number;
 }
+void ContactTree::insert(const string& index, const string& number) {
+	Subscriber** current = &root;
+	Subscriber* pr = NULL;
+	while ((*current) != NULL){
+		pr = (*current);
+		if ((*current)->name == index){
+			(*current)->number = number;
+		}
+		if (index < (*current)->name){
+			current = &((*current)->left);
+		}
+		else {
+			current = &((*current)->right);
+		}
+	}
+	(*current) = new Subscriber(index);
+	(*current)->parent = pr;
+	(*current)->number = number;
+	(*current)->name = index;
+	++sizeOfTree;
+}
 //изменение номера рекурсивное
 void ContactTree::editNumber(const string& index, const string& newNumber, Subscriber* node){
-	if (node!=NULL){
+	if (node != NULL){
 		editNumber(index, newNumber, node->left);
 		if (node->name == index){
 			node->number = newNumber;
@@ -41,7 +62,7 @@ void ContactTree::editNumber(const string& index, const string& newNumber, Subsc
 
 //изменение имени рекурсивное
 void ContactTree::editName(const string& index, const string& newName, Subscriber* node){
-	if (node!=NULL){
+	if (node != NULL){
 		editName(index, newName, node->left);
 		if (node->name == index){
 			node->name = newName;
@@ -49,7 +70,7 @@ void ContactTree::editName(const string& index, const string& newName, Subscribe
 		editName(index, newName, node->right);
 	}
 }
-//надо придумать как сделать поиск по имени рекурсивным, это избавит нас от сложновтей в слуячае если имена изменены
+//надо придумать как сделать поиск по имени рекурсивным, это избавит нас от сложноcтей в случае если имена изменены
 //поиск по имени бинарный,
 ContactTree::Subscriber* ContactTree::searchByName(const string& index){
 	Subscriber** current = &root;
@@ -249,6 +270,48 @@ void ContactTree::print(Subscriber* node){
 	cout << "number " << node->number << endl << endl;
 }
 
-ContactTree::Subscriber* getRoot(ContactTree* A){
-	return A->root;
+ContactTree::Subscriber* getRoot(const ContactTree& A){
+	return A.root;
+}
+void ContactTree::saveAtFile(const string& fileName, const string& mode){
+	/*тут костыль т.к функция самой записи в файл рекурсивная, значит мы будем файл постоянно переоткрыввать, а значит нам нужно использовать флаг ofstream::app
+	для записи в конец файла, иначе мы увидим лишь последюю строчку в базе, а т.к мы испотльзуем для записи флажок app возникает необходимость
+	перед запуском рекурсивной записи очистить прыдыдущий файл, если он существует*/
+	ofstream fout(fileName, ofstream::trunc);
+	saveR(root, fileName, mode);
+}
+void ContactTree::saveR(Subscriber* node, const string& fileName, const string& mode){//рекурсивный обход дерева и запись в файл
+	if (node){
+		saveR(node->left, fileName, mode);
+		if (mode == "t" || mode == "T"){
+			ofstream fout(fileName, ofstream::out | ofstream::app);//ключ app говорит что мы открываем файл для записи в конец файла
+			fout << "name " << node->name << endl;
+			fout << "number " << node->number << endl << endl;
+		}
+		else {
+			if (mode == "b" || mode == "B"){
+				ofstream fout(fileName, ofstream::binary | ofstream::app);//ключ app говорит что мы открываем файл для записи в конец файла
+				fout << node->name << endl;
+				fout << node->number << endl;
+			}
+		}
+		saveR(node->right, fileName, mode);
+	}
+}
+void ContactTree::readFromFile(const string& fileName){
+	ifstream fin(fileName);
+	string name;
+	string number;
+	if (!fin.is_open()){//если файл не открыт
+		cout << "error read file!" << endl;
+	}
+	else{
+		while (!fin.eof()){
+			//можно еще было использовать getline(fin, name)
+			fin >> name;
+			fin>>number;
+			insert(name, number);
+		}
+		fin.close();
+	}
 }

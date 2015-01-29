@@ -11,8 +11,8 @@ public:
 	virtual ~ContactTree();
 
 	struct Subscriber {
-		string number;
 		string name;
+		string number;
 		Subscriber* left;
 		Subscriber* right;
 		Subscriber* parent;
@@ -23,6 +23,7 @@ public:
 	string& operator[](const string&);
 	void editNumber(const string&, const string&, Subscriber*);
 	void editName(const string&, const string&, Subscriber*);
+	void insert(const string&, const string&);
 	Subscriber* searchByName(const string&);
 	void searchByNumber(const string&, Subscriber*);
 	void deleteContact(const string&);
@@ -33,7 +34,10 @@ public:
 	Subscriber* min(Subscriber*);
 	Subscriber* next(Subscriber*);
 	Subscriber* prev(Subscriber*);
-	friend Subscriber* getRoot(ContactTree*);
+	void saveAtFile(const string&, const string&);
+	void saveR(Subscriber*, const string&, const string&);
+	void readFromFile(const string&);
+	friend Subscriber* getRoot(const ContactTree&);
 private:
 	Subscriber* root;
 	size_t sizeOfTree;
