@@ -20,18 +20,21 @@
 *.o
 obj/
 bin/
-##############################
-#Просто файлы, которые я не хочу пушить на гит
-##############################
+#################
+##Просто файлы, которые я не хочу пушить на гит
+#################
 .directory
+
 ############
 ## Windows
 ############
-# Windows image file caches
+# #Windows image file caches
 Thumbs.db
-# Folder config file
+## Folder config file
 Desktop.ini
-#Windows Visual Stuio
+################
+##Windows Visual Stuio
+################
 *.sdf
 *.dln
 *.suo
