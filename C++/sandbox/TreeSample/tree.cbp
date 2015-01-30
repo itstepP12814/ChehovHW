@@ -32,9 +32,9 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="../ContactTree.cpp" />
-		<Unit filename="../ContactTree.h" />
-		<Unit filename="../main.cpp" />
+		<Unit filename="ContactTree.cpp" />
+		<Unit filename="ContactTree.h" />
+		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

@@ -4,34 +4,32 @@
 #include <fstream>
 using namespace std;
 
-class ContactTree
-{
+class ContactTree {
 public:
-	ContactTree();
-	virtual ~ContactTree();
+    ContactTree();
+    virtual ~ContactTree();
 
-	struct Subscriber {
-		int number;
-		int name;
-		Subscriber* left;
-		Subscriber* right;
-		Subscriber* parent;
-		Subscriber(const int index) :name(index), left(NULL), right(NULL), parent(NULL) {}
-		~Subscriber() {}
-	};
+    struct Subscriber {
+        int number;
+        int name;
+        Subscriber* left;
+        Subscriber* right;
+        Subscriber* parent;
+        Subscriber(const int index) :name(index), left(NULL), right(NULL), parent(NULL) {}
+        ~Subscriber() {}
+    };
 
-	int& operator[](const int);
-	Subscriber* searchByName(const int);
-	void deleteContact(const int);
-	void print(Subscriber*);
-	void showFromLeft(Subscriber*);
-	void showFromRight(Subscriber*);
-	Subscriber* max(Subscriber*);
-	Subscriber* min(Subscriber*);
-	Subscriber* next(Subscriber*);
-	Subscriber* prev(Subscriber*);
-	friend Subscriber* getRoot(ContactTree*);
+    int& operator[](const int);
+    Subscriber* searchByName(const int);
+    void deleteContact(const int);
+    void print(Subscriber*);
+    void showFromLeft(Subscriber*);
+    Subscriber* max(Subscriber*);
+    Subscriber* min(Subscriber*);
+    Subscriber* next(Subscriber*);
+    Subscriber* prev(Subscriber*);
+    friend Subscriber* getRoot(const ContactTree&);
 private:
-	Subscriber* root;
-	size_t sizeOfTree;
+    Subscriber* root;
+    size_t sizeOfTree;
 };

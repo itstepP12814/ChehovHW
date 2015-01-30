@@ -1,220 +1,181 @@
 #include "ContactTree.h"
 
-ContactTree::ContactTree() : root(NULL), sizeOfTree(0)
-{
+ContactTree::ContactTree() : root(NULL), sizeOfTree(0) {
 }
 
 
-ContactTree::~ContactTree()
-{
+ContactTree::~ContactTree() {
 }
-int& ContactTree::operator[](const int index){
-	Subscriber** current = &root;
-	Subscriber* pr = NULL;
-	while ((*current) != NULL){
-		pr = (*current);
-		if ((*current)->name == index){
-			return (*current)->number;
-		}
-		if (index < (*current)->name){
-			current = &((*current)->left);
-		}
-		else {
-			current = &((*current)->right);
-		}
-	}
-	(*current) = new Subscriber(index);
-	(*current)->parent = pr;
-	++sizeOfTree;
-	return (*current)->number;
+int& ContactTree::operator[](const int index) {
+    Subscriber** current = &root;
+    Subscriber* pr = NULL;
+    while ((*current) != NULL) {
+        pr = (*current);
+        if ((*current)->name == index) {
+            return (*current)->number;
+        }
+        if (index < (*current)->name) {
+            current = &((*current)->left);
+        } else {
+            current = &((*current)->right);
+        }
+    }
+    (*current) = new Subscriber(index);
+    (*current)->parent = pr;
+    ++sizeOfTree;
+    return (*current)->number;
 }
-void ContactTree::showFromLeft(Subscriber* node){
-	if (node != NULL){
-		if (node->left){
-			showFromLeft(node->left);
-		}
-		print(node);
-		if (node->right){
-			showFromLeft(node->right);
-		}
-	}
+void ContactTree::showFromLeft(Subscriber* node) {
+    if (node != NULL) {
+        if (node->left) {
+            showFromLeft(node->left);
+        }
+        print(node);
+        if (node->right) {
+            showFromLeft(node->right);
+        }
+    }
 }
-void ContactTree::showFromRight(Subscriber* node){
-	if (node != NULL){
-		showFromRight(node->right);
-		print(node);
-		showFromRight(node->left);
-	}
+ContactTree::Subscriber* ContactTree::max(Subscriber* node) {
+    if (node != NULL) {
+        while (node->right != NULL) {
+            node = node->right;
+        }
+        return node;
+    } else return NULL;
 }
-
-ContactTree::Subscriber* ContactTree::max(Subscriber* node){
-	if (node != NULL){
-		while (node->right != NULL){
-			node = node->right;
-		}
-		return node;
-	}
-	else return NULL;
+ContactTree::Subscriber* ContactTree::min(Subscriber* node) {
+    if (node != NULL) {
+        while (node->left != NULL) {
+            node = node->left;
+        }
+        return node;
+    } else return NULL;
 }
-ContactTree::Subscriber* ContactTree::min(Subscriber* node){
-	if (node != NULL){
-		while (node->left != NULL){
-			node = node->left;
-		}
-		return node;
-	}
-	else return NULL;
+ContactTree::Subscriber* ContactTree::next(Subscriber* node) {
+    if (node != NULL && node->right != NULL) {
+        return min(node->right);
+    } else return NULL;
 }
-ContactTree::Subscriber* ContactTree::next(Subscriber* node){
-	if (node != NULL && node->right != NULL){
-		return min(node->right);
-	}
-	else return NULL;
-}
-ContactTree::Subscriber* ContactTree::prev(Subscriber* node){
-	if (node != NULL&&node->left != NULL){
-		return max(node->left);
-	}
-	else return NULL;
+ContactTree::Subscriber* ContactTree::prev(Subscriber* node) {
+    if (node != NULL&&node->left != NULL) {
+        return max(node->left);
+    } else return NULL;
 }
 
-ContactTree::Subscriber* ContactTree::searchByName(const int index){
-	Subscriber** current = &root;
-	int checker = 0;
-	while ((*current) != NULL){
-		if ((*current)->name == index){
-			cout << "found!" << endl;
-			print(*current);
-			checker = 1;
-			return *current;
-		}
-		if (index < (*current)->name){
-			current = &((*current)->left);
-		}
-		else {
-			current = &((*current)->right);
-		}
-	}
-	if (!checker) {
-		cout << "nothing found" << endl;
-		return NULL;
-	}
-	else return *current;
+ContactTree::Subscriber* ContactTree::searchByName(const int index) {
+    Subscriber** current = &root;
+    int checker = 0;
+    while ((*current) != NULL) {
+        if ((*current)->name == index) {
+            cout << "found!" << endl;
+            print(*current);
+            checker = 1;
+            return *current;
+        }
+        if (index < (*current)->name) {
+            current = &((*current)->left);
+        } else {
+            current = &((*current)->right);
+        }
+    }
+    if (!checker) {
+        cout << "nothing found" << endl;
+        return NULL;
+    } else return *current;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void ContactTree::deleteContact(const int index){
-	//Важно понять что мы не удаляем структурно "удаляемый узел", мы перезаписываем значения в нем, но сохраняем связи
+void ContactTree::deleteContact(const int index) {
+    Subscriber* deletedContact = searchByName(index);//СѓРґР°Р»СЏРµРјС‹Р№ РєРѕРЅС‚Р°РєС‚
+    Subscriber* minFromRightBranch = NULL;//СѓР·РµР» СЃР»РµРґСѓСЋС‰РёР№ РїРѕ РёРЅРґРµРєСЃСѓ Р·Р° СѓРґР°Р»СЏРµРјС‹Рј, РїСЂРѕС‰Рµ РіРѕРІРѕСЂСЏ СЌС‚Рѕ СЃР°РјС‹Р№ "Р»РµРІС‹Р№" СѓР·РµР» РІ РїСЂР°РІРѕР№ РѕС‚ СѓРґР°Р»СЏРµРјРѕРіРѕ РІРµС‚РєРё
 
-	Subscriber* deletedContact = searchByName(index);//удаляемый контакт
-	Subscriber* minFromRightBranch = NULL;//узел следующий по индексу за удаляемым, проще говоря это самый "левый" узел в правой от удаляемого ветки
-	Subscriber* maxFromLeftBranch = NULL;//узел предыдущий по индексу перед удаляемым, это будет самый "правый" узел в левой от удаляемого ветке
-
-	//случай если просто лист, лист - это узел у которого нету ни  одного потомка
-	if (deletedContact){
-		if (deletedContact->left == NULL && deletedContact->right == NULL){
-			if (deletedContact == deletedContact->parent->left){
-				//переписываем родителю указатели на путсые в зависимости от того с какой стороны стоял лист
-				deletedContact->parent->left = NULL;
-				delete deletedContact;
-				//мы удалили структуру по указателю, но в самом указателе оказался мусор, принулдительно Выходим из функции
-				return;
-			}
-			else {
-				deletedContact->parent->right = NULL;
-				delete deletedContact;
-				return;
-			}
-		}
-	}
-
-	//случай если у удаляемого узла есть ветка справа, то на место удаляемого подставляем следующий по индексу узел, при этом есть ли слева ветка мы не учитываем
-	if (deletedContact != NULL && deletedContact->right != NULL){
-		minFromRightBranch = next(deletedContact);//находим самый левый элемент в правой ветке
-		//у найденного эелемента точно нету потомков слева, но могут быть потомки справа
-
-		if (minFromRightBranch){
-			//если элемент найден переписываем значения из него в удаляемый
-			deletedContact->name = minFromRightBranch->name;
-			deletedContact->number = minFromRightBranch->number;
-
-			if (minFromRightBranch->right == NULL){//если потомков справа у нашего "левого" нету, т.е он лист, т.к (слева точно ничего нету)
-
-				if (minFromRightBranch == minFromRightBranch->parent->right){
-					minFromRightBranch->parent->right = NULL;
-				}
-				else {
-					minFromRightBranch->parent->left = NULL; //переписываем правый указатель у родителя на пустой, левый не трогаем;
-				}
-
-				delete minFromRightBranch;//удаляем лист
-			}
-			else {
-				//если у "левого" есть правая ветка, переписываем левый указатель у родителя на эту правую ветку
-				if (minFromRightBranch == minFromRightBranch->parent->right){
-					minFromRightBranch->parent->right = minFromRightBranch->right;
-					minFromRightBranch->right->parent = minFromRightBranch->parent;
-				}
-				else {
-					minFromRightBranch->parent->left = minFromRightBranch->right;
-					minFromRightBranch->right->parent = minFromRightBranch->parent;
-				}
-				delete minFromRightBranch;
-			}
-
-		}
-	}
-	//случай если справа ветки нету, но есть ветка слева
-	else{
-		if (deletedContact != NULL && deletedContact->left != NULL){
-			maxFromLeftBranch = prev(deletedContact);//находим самый "правый" узел в левой от удаляемого ветке
-
-			if (maxFromLeftBranch){
-				//если элемент найден переписываем значения из него в удаляемый
-				deletedContact->name = maxFromLeftBranch->name;
-				deletedContact->number = maxFromLeftBranch->number;
-
-				if (maxFromLeftBranch->left == NULL){//если потомков слева у нашего "правого" нету, т.е он лист, т.к справа ничего нету
-
-					if (maxFromLeftBranch == maxFromLeftBranch->parent->left){
-						maxFromLeftBranch->parent->left = NULL;
-					}
-					else {
-						maxFromLeftBranch->parent->right = NULL; //переписываем правый указатель у родителя на пустой, левый не трогаем;
-					}
-
-					delete maxFromLeftBranch;//удаляем лист
-				}
-				else {
-					//Если у "правого" есть левая ветка,
-					if (maxFromLeftBranch == maxFromLeftBranch->parent->left){
-						maxFromLeftBranch->parent->left = maxFromLeftBranch->left;
-						maxFromLeftBranch->left->parent = maxFromLeftBranch->parent;
-					}
-					else {
-						maxFromLeftBranch->parent->right = maxFromLeftBranch->left;
-						maxFromLeftBranch->left->parent = maxFromLeftBranch->parent;
-					}
-					delete maxFromLeftBranch;
-				}
-			}
-		}
-	}
-	if (deletedContact == NULL){
-		//если мы ошиблись и передали пустую ноду для удаления
-		cout << "delete error" << endl;
-	}
-
+    if(!deletedContact) { //РЅР°Р№РґРµРЅ Р»Рё РІРѕРѕР±С‰Рµ СѓРґР°Р»СЏРµРјС‹Р№ СѓР·РµР»
+        cout<< "error" <<endl;
+        return;
+    }
+    //СЃР»СѓС‡Р°Р№ 1 РљРѕРіРґР° СѓРґР°Р»СЏРµРјС‹Р№ СЌР»РµРјРµРЅС‚ РїСЂРѕСЃС‚Рѕ Р»РёСЃС‚
+    if (deletedContact->left == NULL && deletedContact->right == NULL) {
+        if (deletedContact == deletedContact->parent->left) {
+            //РїРµСЂРµРїРёСЃС‹РІР°РµРј СЂРѕРґРёС‚РµР»СЋ СѓРєР°Р·Р°С‚РµР»Рё РЅР° РїСѓС‚СЃС‹Рµ РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ С‚РѕРіРѕ СЃ РєР°РєРѕР№ СЃС‚РѕСЂРѕРЅС‹ СЃС‚РѕСЏР» Р»РёСЃС‚
+            deletedContact->parent->left = NULL;
+            delete deletedContact;
+            //РјС‹ СѓРґР°Р»РёР»Рё СЃС‚СЂСѓРєС‚СѓСЂСѓ РїРѕ СѓРєР°Р·Р°С‚РµР»СЋ, РЅРѕ РІ СЃР°РјРѕРј СѓРєР°Р·Р°С‚РµР»Рµ РѕРєР°Р·Р°Р»СЃСЏ РјСѓСЃРѕСЂ, РїСЂРёРЅСѓР»РґРёС‚РµР»СЊРЅРѕ Р’С‹С…РѕРґРёРј РёР· С„СѓРЅРєС†РёРё
+            return;
+        } else {
+            deletedContact->parent->right = NULL;
+            delete deletedContact;
+            return;
+        }
+    }
+    /*2 СЃР»СѓС‡Р°Р№ РєРѕРіРґР° СЃРїСЂР°РІР° Рё СЃР»РµРІР° РµСЃС‚СЊ РІРµС‚РєРё С‚.Рє РµСЃР»Рё РґРІР° РїСЂРµРґС‹РґСѓС‰РёС… СѓСЃР»РѕРІРёСЏ РїСЂРѕР№РґРµРЅС‹ Р·РЅР°С‡РёС‚ Сѓ РЅР°СЃ РµСЃС‚СЊ РґРІРµ РїРѕР»РЅРѕС†РµРЅРЅС‹Рµ РІРµС‚РєРё
+    РјС‹ РЅРµ Р±СѓРґРµРј СЃС‚СЂСѓРєС‚СѓСЂРЅРѕ СЂР°Р·СЂСѓС‰Р°С‚СЊ СЌР»РµРјРµРЅС‚, Р° РЅР°Р№РґРµРј СЃР»РµРґСѓСЋС‰РёР№ РїРѕ РІРѕР·СЂР°СЃС‚Р°РЅРёСЋ РїРѕ РёРЅРґРµРєСЃСѓ СЌР»РµРјРµРЅС‚, РїРµСЂРµРїРёС€РµРј РґР°РЅРЅС‹Рµ РёР· РЅРµРіРѕ Рё СѓРґР°Р»РёРј "СЃР»РµРґСѓСЋС‰РёР№"
+    С‚Р°Рє РґРµР»Р°РµС‚СЃСЏ, РїРѕС‚РѕРјСѓ С‡С‚Рѕ Сѓ СЌС‚РѕРіРѕ СЃР»РµРґСѓСЋС‰РµРіРѕ Р±СѓРґРµС‚ Р»РёР±Рѕ РѕРґРґРЅР° РґРѕС‡РµСЂРЅСЏСЏ РІРµС‚РєР° СЃРїСЂР°РІР° Р»РёР±Рѕ РІРѕРѕР±С‰Рµ РЅРё РѕРґРЅРѕР№
+    РїСЂРѕРІРµСЂРєР° СѓСЃР»РѕРІРёСЏ (deletedContact->right!=NULL && deletedContact->left!=NULL) РѕСЃРѕР±Рѕ РЅРµРЅСѓР¶РЅР°, С‚.Рє РІ РґР°РЅРЅРѕРј СЃР»СѓС‡Р°Рµ РјС‹ СѓРІРµСЂРµРЅС‹ С‡С‚Рѕ СѓР·РµР» С‚РѕС‡РЅРѕ РЅРµ РїСѓСЃС‚РѕР№
+    Рё С‡С‚Рѕ РІ РЅРµРј С‚РѕС‡РЅРѕ РґРІРµ РІРµС‚РєРё
+    РјС‹ С‚РѕС‡РЅРѕ Р·РЅР°РµРј С‡С‚Рѕ Сѓ РЅРµРіРѕ РЅРµ Р±СѓРґРµС‚ РІРµС‚РєРё СЃР»РµРІР°, РЅРѕ РјРѕР¶РµС‚ Р±С‹С‚СЊ РІРµС‚РєР° СЃРїСЂР°РІР°, Р° РјРѕР¶РµС‚ Рё РЅРµ Р±С‹С‚СЊ;*/
+    if(deletedContact->right!=NULL && deletedContact->left!=NULL) {
+        minFromRightBranch=next(deletedContact);//РЅР°С…РѕРґРёРј СЃР»РµРґСѓСЋС‰РёР№ РїРѕ РёРЅРґРµРєСЃСѓ СЌР»РµРјРµРЅС‚ РёР· РїСЂР°РІРѕР№ РІРµС‚РєРё, СЌС‚Рѕ Р±СѓРґРµС‚ СЃР°РјС‹Р№ "Р»РµРІС‹Р№ СЌР»РµРјРµРЅС‚"
+        if(minFromRightBranch) {
+            deletedContact->name=minFromRightBranch->name;
+            deletedContact->number=minFromRightBranch->number;
+            if(minFromRightBranch->right!=NULL) {
+                //РµСЃР»Рё РІРїСЂР°РІР° РµСЃС‚СЊ РІРµС‚РєР° РїСЂРѕРІРµСЂСЏРµРј РєР°РєРёРј СЌС‚РѕС‚ СЌР»РµРјРµРЅС‚ СЃС‚РѕРёС‚ РѕС‚ СЂРѕРёРґРёС‚РµР»СЏ, С‚.Рє СЃР°РјС‹Р№ "Р»РµРІС‹Р№" РјРѕР¶РµС‚ СЃС‚РѕСЏС‚СЊ СЃРїСЂР°РІР°, РµСЃР»Рё РІРµС‚РєР° РёРґРµС‚ РѕС‚РІРµСЃРЅРѕ РІРїСЂР°РІРѕ
+                //РїРѕ СЃСѓС‚Рё РІ СЌС‚РѕРј СЃР»СѓС‡Р°Рµ "СЃР°РјС‹Р№ Р»РµРІС‹Р№" Р±СѓРґРµС‚ РґРѕС‡РµСЂРЅРёРј РѕС‚ СѓРґР°Р»СЏРµРјРѕРіРѕ
+                if(minFromRightBranch==minFromRightBranch->parent->left) {
+                    minFromRightBranch->parent->left=minFromRightBranch->right;
+                    minFromRightBranch->right->parent=minFromRightBranch->parent;
+                    delete minFromRightBranch;
+                } else {
+                    minFromRightBranch->parent->right=minFromRightBranch->right;
+                    minFromRightBranch->right->parent=minFromRightBranch->parent;
+                    delete minFromRightBranch;
+                }
+            } else {
+                //РµСЃР»Рё "СЃР»РµРґСѓСЋС‰РёР№" РїСЂРѕСЃС‚Рѕ Р»РёСЃС‚
+                if(minFromRightBranch==minFromRightBranch->parent->left) {
+                    minFromRightBranch->parent->left=NULL;
+                } else {
+                    minFromRightBranch->parent->right=NULL;
+                }
+                delete minFromRightBranch;
+            }
+        }
+        return;
+    }
+    //3 РµСЃР»Рё СЃР»РµРІР° РѕС‚ СѓРґР°Р»СЏРµРјРѕРіРѕ СѓР·Р»Р° РЅРёС‡РµРіРѕ РЅРµС‚
+    if( deletedContact->right!=NULL && deletedContact->left==NULL ) {
+        //РџСЂРѕРІРµСЂСЏРµРј СЃ РєР°РєРѕР№ СЃС‚РѕСЂРѕРЅС‹ СѓРґР°Р»СЏРµРјС‹Р№ СЃС‚РѕРёС‚ РѕС‚ СЃРІРѕРµРіРѕ СЂРѕРґРёС‚РµР»СЏ
+        if(deletedContact==deletedContact->parent->right) {
+            deletedContact->parent->right=deletedContact->right;
+            deletedContact->right->parent=deletedContact->parent;
+        } else {
+            deletedContact->parent->left=deletedContact->right;
+            deletedContact->right->parent=deletedContact->parent;
+        }
+        delete deletedContact;
+    } else {
+        //4 СЃР»СѓС‡Р°Р№ РєРѕРіРґР° СЃРїСЂР°РІР° РѕС‚ СѓРґР°Р»СЏРµРјРѕРіРѕ СѓР·Р»Р° РЅРёС‡РµРіРѕ РЅРµС‚Сѓ
+        //РїСЂРѕРІРµСЂСЏРµРј СЃ РєР°РєРѕР№ СЃС‚РѕСЂРѕРЅС‹ СѓРґР°Р»СЏРµРјС‹Р№ СЃС‚РѕРёС‚ РѕС‚ СЂРѕРґРёС‚РµР»СЏ
+        if(deletedContact==deletedContact->parent->right) {
+            deletedContact->parent->right=deletedContact->left;
+            deletedContact->left->parent=deletedContact->parent;
+        } else {
+            deletedContact->parent->left=deletedContact->left;
+            deletedContact->left->parent=deletedContact->parent;
+        }
+        delete deletedContact;
+    }
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void ContactTree::print(Subscriber* node) {
+    if (node->parent) {
+        cout << "parent " << node->parent->name << endl;
+    }
+    cout << "name " << node->name << endl;
+    cout << "number " << node->number << endl << endl;
 }
 
-void ContactTree::print(Subscriber* node){
-	if (node->parent){
-		cout << "parent " << node->parent->name << endl;
-	}
-	cout << "name " << node->name << endl;
-	cout << "number " << node->number << endl << endl;
-}
-
-ContactTree::Subscriber* getRoot(ContactTree* A){
-	return A->root;
+ContactTree::Subscriber* getRoot(const ContactTree& A) {
+    return A.root;
 }

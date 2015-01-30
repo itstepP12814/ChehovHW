@@ -19,7 +19,7 @@ int main(){
 	A[29] = 14;
 	A[31] = 15;
 	A[42] = 16;
-	//вставка с помощью оператора квадратных скобок
+	//РІСЃС‚Р°РІРєР° СЃ РїРѕРјРѕС‰СЊСЋ РѕРїРµСЂР°С‚РѕСЂР° РєРІР°РґСЂР°С‚РЅС‹С… СЃРєРѕР±РѕРє
 	A["dasha"] = "1264587";
 	A["glasha"] = "5843659";
 	A["glasha"] = "5843659";
@@ -38,8 +38,8 @@ int main(){
 	A.searchByNumber("5487845", getRoot(A));
 	A.searchByName("dasha");
 	A.deleteContact("chashbr");
-	A.saveAtFile("save.txt","b");
-	A.readFromFile("save.txt");
+	A.saveAtFile("save.txt", "b");
+	//A.readFromFile("save.txt");
 	A.showFromLeft(getRoot(A));
 	return 0;
 }
