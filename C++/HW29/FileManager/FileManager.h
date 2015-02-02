@@ -8,13 +8,6 @@
 #include <fstream>
 using namespace std;
 
-class FileManager
-{
-public:
-	FileManager();
-	virtual ~FileManager();
-	void moveAllFiles(string, string);
-	void copyAllFiles(string, string);
-	
-};
-
+void moveAllFiles(string, string);
+void copyAllFiles(string, string);
+int answer(const _finddata_t*);
