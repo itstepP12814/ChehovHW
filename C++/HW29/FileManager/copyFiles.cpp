@@ -1,13 +1,14 @@
 #include "FileManager.h"
-void copyAllFiles(string source, string destination){
+void copyAllFiles(const string source, const string destination){
 	_finddata_t *fileinfo = new _finddata_t;
-	_finddata_t *same_fileinfo = new _finddata_t;//существует в новой директории файл с таким-же именем?
-	int checker, indicatorOfSameFile, done;
-	string mask = source + "*.*";
-	done = _findfirst(mask.c_str(), fileinfo);
+	_finddata_t *same_fileinfo = new _finddata_t;//существует в новой директории файл с таким же именем?
+	int checker = 1, indicatorOfSameFile, done;
+	string src_mask = parser(source);
+	done = _findfirst(src_mask.c_str(), fileinfo);
 	if (done == -1){
 		throw exception("source directory is not found!\n");
 	}
+	//переход по самой корневой директории
 	checker = _findnext(done, fileinfo);
 	checker = _findnext(done, fileinfo);
 	string oldName = source;
@@ -34,7 +35,7 @@ void copyAllFiles(string source, string destination){
 			}
 			checker = _findnext(done, fileinfo);
 		}
-		/*если поддиректория была последней, то наш чекер измениться и мы не должны пытаться прочитать поддиректорию в потоке ввода*/
+		/*если поддиректория была последней, то наш чекер изменится и мы не должны пытаться прочитать поддиректорию в потоке ввода*/
 		if (checker != -1){
 			indicatorOfSameFile = 1;
 			oldName += fileinfo->name;
@@ -62,29 +63,62 @@ void copyAllFiles(string source, string destination){
 		}
 	}
 	_findclose(done);
+	_findclose(indicatorOfSameFile);
 	delete fileinfo;
 	delete same_fileinfo;
 }
-int answer(const _finddata_t* fileinfo){
-	int indicatorOfSameFile;
-	if (fileinfo->attrib &_A_SUBDIR){
-		cout << "replace the current subdirectory?" << endl;
+void copyFile(const string source, const string destination){
+	/*НАДО СДЕЛАТЬ НОРМАЛЬНЫЙ ПАРСЕР И СДЕЛАТЬ НОМРАЛЬНОЕ КОПИРОВАНИЕ ОДНОЙ ПАПКИ*/
+	_finddata_t *fileinfo = new _finddata_t;
+	_finddata_t *same_fileinfo = new _finddata_t;
+	int done = 1, indicatorOfSameFile = 1, checkerForFile = 0, checkerForDir = 0;
+	done = _findfirst(source.c_str(), fileinfo);
+	if (done == -1){//проверяем существует ли исходный файл
+		throw exception("cant open file!\n");
 	}
-	else {
-		cout << "replace the current file?" << endl;
+	string dst_mask = parser(destination);
+	indicatorOfSameFile = _findfirst(dst_mask.c_str(), same_fileinfo);
+	if (indicatorOfSameFile == -1){//проверяем существует ли в принципе директория в которую мы собираемся скопировать файл
+		throw exception("cant open destination directory!\n");
 	}
-	cout << fileinfo->name << endl << "Y/N" << endl;
-	char answer;
-	cin >> answer;
-	switch (answer){
-	case 'Y': return 1;
-		break;
-	case 'y': return 1;
-		break;
-	case 'N': return 0;
-		break;
-	case 'n': return 0;
-		break;
-	default: return 1;
+	string newName = destination + fileinfo->name;//формируем имя копии
+	ifstream fin;
+	ofstream fout;
+	char buff[256];
+	indicatorOfSameFile = _findfirst(newName.c_str(), same_fileinfo);
+	if (indicatorOfSameFile != -1){//проверяем существует такой же файл в другой директории
+		if (answer(same_fileinfo)){//если существует спрашиваем че делать. если добро-переписываем
+			checkerForFile = 1;//делаем чекер положительным для файла и для папки, либо чекер останется 0
+			checkerForDir = 1;
+		}
 	}
+	else{
+		checkerForFile = 1;//если не уществует все чекеры делаем положительными
+		checkerForDir = 1;
+	}
+
+	if (fileinfo->attrib &_A_SUBDIR && checkerForDir != 0) {
+		//правило для копирования папки, мы уже спросили заранее заменить или нет, теперь копируем
+		//все файлы из подпапки. Если правило отработало цикл для копирвоания файла не запуститься
+		mkdir(newName.c_str());
+		copyAllFiles(source+"\\", newName+"\\");
+		return;//досрочно выходим из функции т.к чекер уже положительный а переписывать папку в потоке вывода нам нельзя
+	}
+
+	if (checkerForFile){
+		fin.open(source);
+		fout.open(newName);
+		if (!fin.is_open()){
+			throw exception("cant open file!\n");
+		}
+		fin.read(buff, sizeof(char));
+		while (!fin.eof()){
+			fout.write(buff, sizeof(char));
+			fin.read(buff, sizeof(char));
+		}
+	}
+	_findclose(done);
+	_findclose(indicatorOfSameFile);
+	delete same_fileinfo;
+	delete fileinfo;
 }

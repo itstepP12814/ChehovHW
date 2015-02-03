@@ -79,6 +79,9 @@
     <ClCompile Include="copyFiles.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="moveFiles.cpp" />
+    <ClCompile Include="parser.cpp" />
+    <ClCompile Include="re_Name_Move.cpp" />
+    <ClCompile Include="showAllFiles.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FileManager.h" />

@@ -1,15 +1,14 @@
 #include "FileManager.h"
-void moveAllFiles(string source, string destination){
-	_finddata_t *fileinfo = new _finddata_t;//Óêàçàòåëü íà ïåðâûé îáúåêò ñòðóêòóðû ñ èíôîé î ïåðâîì íàéäåííîì ôàéëå
+void moveAllFiles(const string source, const string destination){
+	_finddata_t *fileinfo = new _finddata_t;//Ð£ÐºÐ°Ð·Ð°Ñ‚ÐµÐ»ÑŒ Ð½Ð° Ð¿ÐµÑ€Ð²Ñ‹Ð¹ Ð¾Ð±ÑŠÐµÐºÑ‚ ÑÑ‚Ñ€ÑƒÐºÑ‚ÑƒÑ€Ñ‹ Ñ Ð¸Ð½Ñ„Ð¾Ð¹ Ð¾ Ð¿ÐµÑ€Ð²Ð¾Ð¼ Ð½Ð°Ð¹Ð´ÐµÐ½Ð½Ð¾Ð¼ Ñ„Ð°Ð¹Ð»Ðµ
 	_finddata_t *same_fileinfo = new _finddata_t;
-	int done, checker, indicatorOfSameFile;
-	string mask = source + "*.*";
-	done = _findfirst(mask.c_str(), fileinfo);
+	int done, checker = 1, indicatorOfSameFile;
+	string src_mask = parser(source);
+	done = _findfirst(src_mask.c_str(), fileinfo);
 	if (done == -1){
 		throw exception("source directory is not found!\n");
 	}
-	//ïî÷åìó íóæíî ñäåëàòü findfirst, à ïîòîì äâàæäû findnext??? ×òîáû íàêîíåö ïåðåéòè ê ïåðâîìó ôàéëó â äèðåêòîðèè, ÷òî
-	//çà èìåíà ôàéëîâ . è ".."???
+	//Ð¿ÐµÑ€ÐµÑ…Ð¾Ð´ Ð¿Ð¾ ÑÐ°Ð¼Ð¾Ð¹ ÐºÐ¾Ñ€Ð½ÐµÐ²Ð¾Ð¹ Ð´Ð¸Ñ€ÐµÐºÑ‚Ð¾Ñ€Ð¸Ð¸
 	checker = _findnext(done, fileinfo);
 	checker = _findnext(done, fileinfo);
 	string oldName = source;
@@ -18,41 +17,36 @@ void moveAllFiles(string source, string destination){
 		while (fileinfo->attrib &_A_SUBDIR && checker != -1){
 			string src = source + fileinfo->name + "\\";
 			string dst = destination + fileinfo->name;
-			if (_findfirst(dst.c_str(), same_fileinfo) != -1){ //åñëè íàì âñòðåòèëàñü ïîääèðåêòîðèÿ ñ òàêèì æå íàçâàíèåì, êàê â èñòî÷íèêå - ñïðàøèâàåì ÷å äåëàòü
-				if (answer(same_fileinfo)){//åñëè ãîâîðÿò çàìåíèòü äîáàâëÿåì ê ñòðîêå äâà // ÷òîáû ïîëó÷èòü ïóòü ê ïàïêå, è çàïóñêàåì ðåêóðñèþ
+			if (_findfirst(dst.c_str(), same_fileinfo) != -1){ //ÐµÑÐ»Ð¸ Ð½Ð°Ð¼ Ð²ÑÑ‚Ñ€ÐµÑ‚Ð¸Ð»Ð°ÑÑŒ Ð¿Ð¾Ð´Ð´Ð¸Ñ€ÐµÐºÑ‚Ð¾Ñ€Ð¸Ñ Ñ Ñ‚Ð°ÐºÐ¸Ð¼ Ð¶Ðµ Ð½Ð°Ð·Ð²Ð°Ð½Ð¸ÐµÐ¼, ÐºÐ°Ðº Ð² Ð¸ÑÑ‚Ð¾Ñ‡Ð½Ð¸ÐºÐµ - ÑÐ¿Ñ€Ð°ÑˆÐ¸Ð²Ð°ÐµÐ¼ Ñ‡Ðµ Ð´ÐµÐ»Ð°Ñ‚ÑŒ
+				if (answer(same_fileinfo)){//ÐµÑÐ»Ð¸ Ð³Ð¾Ð²Ð¾Ñ€ÑÑ‚ Ð·Ð°Ð¼ÐµÐ½Ð¸Ñ‚ÑŒ Ð´Ð¾Ð±Ð°Ð²Ð»ÑÐµÐ¼ Ðº ÑÑ‚Ñ€Ð¾ÐºÐµ Ð´Ð²Ð° // Ñ‡Ñ‚Ð¾Ð±Ñ‹ Ð¿Ð¾Ð»ÑƒÑ‡Ð¸Ñ‚ÑŒ Ð¿ÑƒÑ‚ÑŒ Ðº Ð¿Ð°Ð¿ÐºÐµ, Ð¸ Ð·Ð°Ð¿ÑƒÑÐºÐ°ÐµÐ¼ Ñ€ÐµÐºÑƒÑ€ÑÐ¸ÑŽ
 					dst += "\\";
 					mkdir(dst.c_str());
 					moveAllFiles(src, dst);
 					rmdir(src.c_str());
 				}
 			}
-			else { //åñëè îäèíàêîâàÿ ïîääèðåêòîðèÿ íå âñòðåòèëàñü - ñîçäàåì íîâóþ
+			else { //ÐµÑÐ»Ð¸ Ð¾Ð´Ð¸Ð½Ð°ÐºÐ¾Ð²Ð°Ñ Ð¿Ð¾Ð´Ð´Ð¸Ñ€ÐµÐºÑ‚Ð¾Ñ€Ð¸Ñ Ð½Ðµ Ð²ÑÑ‚Ñ€ÐµÑ‚Ð¸Ð»Ð°ÑÑŒ - ÑÐ¾Ð·Ð´Ð°ÐµÐ¼ Ð½Ð¾Ð²ÑƒÑŽ
 				dst += "\\";
 				mkdir(dst.c_str());
 				moveAllFiles(src, dst);
 				rmdir(src.c_str());
 			}
 			checker = _findnext(done, fileinfo);
-
-			/*mkdir(dst.c_str());
-			moveAllFiles(src, dst);
-			rmdir(src.c_str());
-			checker = _findnext(done, fileinfo);*/
 		}
 		if (checker != -1){
 			indicatorOfSameFile = 1;
 			oldName += fileinfo->name;
 			newName += fileinfo->name;
-			if (_findfirst(newName.c_str(), same_fileinfo) != -1){ //èùåì íåò ëè òàêîãî æ ôàéëà â íîâîé äèðåêòîðèè
-				indicatorOfSameFile = answer(same_fileinfo);//ñïðàøèâàåì ÷å ñ íèì äåëàòü
+			if (_findfirst(newName.c_str(), same_fileinfo) != -1){ //Ð¸Ñ‰ÐµÐ¼ Ð½ÐµÑ‚ Ð»Ð¸ Ñ‚Ð°ÐºÐ¾Ð³Ð¾ Ð¶ Ñ„Ð°Ð¹Ð»Ð° Ð² Ð½Ð¾Ð²Ð¾Ð¹ Ð´Ð¸Ñ€ÐµÐºÑ‚Ð¾Ñ€Ð¸Ð¸
+				indicatorOfSameFile = answer(same_fileinfo);//ÑÐ¿Ñ€Ð°ÑˆÐ¸Ð²Ð°ÐµÐ¼ Ñ‡Ðµ Ñ Ð½Ð¸Ð¼ Ð´ÐµÐ»Ð°Ñ‚ÑŒ
 			}
-			if (indicatorOfSameFile){//åñëè ìîæíî ïåðåìåñòèòü ôàéëû
-				if (indicatorOfSameFile != 0 && _findfirst(newName.c_str(), same_fileinfo) != -1){ //åñëè òàêîé æå ôàéë ïðèñóòñâóåò â äèðåêòîðèè - óäàëèòü
-					if (remove(newName.c_str()) != 0){//åñëè ôàéë îòêðûò è óäàëåíèå íå óäàëîñü
+			if (indicatorOfSameFile){//ÐµÑÐ»Ð¸ Ð¼Ð¾Ð¶Ð½Ð¾ Ð¿ÐµÑ€ÐµÐ¼ÐµÑÑ‚Ð¸Ñ‚ÑŒ Ñ„Ð°Ð¹Ð»Ñ‹
+				if (indicatorOfSameFile != 0 && _findfirst(newName.c_str(), same_fileinfo) != -1){ //ÐµÑÐ»Ð¸ Ñ‚Ð°ÐºÐ¾Ð¹ Ð¶Ðµ Ñ„Ð°Ð¹Ð» Ð¿Ñ€Ð¸ÑÑƒÑ‚ÑÐ²ÑƒÐµÑ‚ Ð² Ð´Ð¸Ñ€ÐµÐºÑ‚Ð¾Ñ€Ð¸Ð¸ - ÑƒÐ´Ð°Ð»Ð¸Ñ‚ÑŒ
+					if (remove(newName.c_str()) != 0){//ÐµÑÐ»Ð¸ Ñ„Ð°Ð¹Ð» Ð¾Ñ‚ÐºÑ€Ñ‹Ñ‚ Ð¸ ÑƒÐ´Ð°Ð»ÐµÐ½Ð¸Ðµ Ð½Ðµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ
 						throw exception("file is open!\n");
 					}
 				}
-				if (rename(oldName.c_str(), newName.c_str()) != 0){//åñëè ïî êàêèì-òî ïðè÷èíàì íå óäàëîñü ïåðåìåñòèòü/ïåðåèìåíîâàòü
+				if (rename(oldName.c_str(), newName.c_str()) != 0){//ÐµÑÐ»Ð¸ Ð¿Ð¾ ÐºÐ°ÐºÐ¸Ð¼-Ñ‚Ð¾ Ð¿Ñ€Ð¸Ñ‡Ð¸Ð½Ð°Ð¼ Ð½Ðµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ Ð¿ÐµÑ€ÐµÐ¼ÐµÑÑ‚Ð¸Ñ‚ÑŒ/Ð¿ÐµÑ€ÐµÐ¸Ð¼ÐµÐ½Ð¾Ð²Ð°Ñ‚ÑŒ
 					throw exception("cant rename or move file!\n");
 				}
 				newName = destination;
@@ -63,4 +57,42 @@ void moveAllFiles(string source, string destination){
 	}
 	_findclose(done);
 	delete fileinfo;
+}
+void moveFile(const string source, const string destination){
+	_finddata_t *fileinfo = new _finddata_t;
+	_finddata_t *same_fileinfo = new _finddata_t;
+	int done = 1, indicatorOfSameFile = 1, checkerForFile = 0, checkerForDir = 0;
+	done = _findfirst(source.c_str(), fileinfo);
+	if (done == -1){
+		throw exception("cant find file!\n");
+	}
+	string dst_mask = parser(destination);
+	indicatorOfSameFile = _findfirst(dst_mask.c_str(), same_fileinfo);
+	if (indicatorOfSameFile == -1){
+		throw exception("cant open destination directory!\n");
+	}
+	string newName = destination + fileinfo->name;
+	indicatorOfSameFile = _findfirst(newName.c_str(), same_fileinfo);
+	if (indicatorOfSameFile != -1){
+		if (answer(same_fileinfo)){
+			checkerForFile = 1;
+			checkerForDir = 1;
+		}
+	}
+	else{
+		checkerForFile = 1;
+		checkerForDir = 1;
+	}
+
+	if (fileinfo->attrib &_A_SUBDIR && checkerForDir != 0) {
+		mkdir(newName.c_str());
+		moveAllFiles(source + "\\", newName + "\\");
+		remove(source.c_str());
+		return;
+	}
+	if (checkerForFile){
+		if (rename(source.c_str(), newName.c_str()) != 0){
+			throw exception("cant move or rename file!\n");
+		}
+	}
 }

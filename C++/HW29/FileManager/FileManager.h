@@ -8,6 +8,12 @@
 #include <fstream>
 using namespace std;
 
-void moveAllFiles(string, string);
-void copyAllFiles(string, string);
+void moveAllFiles(const string, const string);
+void copyAllFiles(const string, const string);
+void showAllFiles(string);
+void copyFile(const string, const string);
+void moveFile(const string, const string);
+void renameFile(const string, const string);
+void removeFile(const string);
 int answer(const _finddata_t*);
+string parser(string);
