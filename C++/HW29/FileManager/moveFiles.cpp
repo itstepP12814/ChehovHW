@@ -8,7 +8,6 @@ void moveAllFiles(const string source, const string destination){
 	if (done == -1){
 		throw exception("source directory is not found!\n");
 	}
-	//переход по самой корневой директории
 	checker = _findnext(done, fileinfo);
 	checker = _findnext(done, fileinfo);
 	string oldName = source;

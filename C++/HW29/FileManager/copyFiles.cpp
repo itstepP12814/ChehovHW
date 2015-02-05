@@ -68,7 +68,6 @@ void copyAllFiles(const string source, const string destination){
 	delete same_fileinfo;
 }
 void copyFile(const string source, const string destination){
-	/*НАДО СДЕЛАТЬ НОРМАЛЬНЫЙ ПАРСЕР И СДЕЛАТЬ НОМРАЛЬНОЕ КОПИРОВАНИЕ ОДНОЙ ПАПКИ*/
 	_finddata_t *fileinfo = new _finddata_t;
 	_finddata_t *same_fileinfo = new _finddata_t;
 	int done = 1, indicatorOfSameFile = 1, checkerForFile = 0, checkerForDir = 0;

@@ -14,6 +14,6 @@ void showAllFiles(string);
 void copyFile(const string, const string);
 void moveFile(const string, const string);
 void renameFile(const string, const string);
-void removeFile(const string);
+void removeAllFiles(const string);
 int answer(const _finddata_t*);
 string parser(string);

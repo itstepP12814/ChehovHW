@@ -80,6 +80,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="moveFiles.cpp" />
     <ClCompile Include="parser.cpp" />
+    <ClCompile Include="removeAllFiles.cpp" />
     <ClCompile Include="re_Name_Move.cpp" />
     <ClCompile Include="showAllFiles.cpp" />
   </ItemGroup>
