@@ -8,8 +8,9 @@ void moveAllFiles(const string source, const string destination){
 	if (done == -1){
 		throw exception("source directory is not found!\n");
 	}
-	checker = _findnext(done, fileinfo);
-	checker = _findnext(done, fileinfo);
+	while ((strcmp(fileinfo->name, ".") == 0) || (strcmp(fileinfo->name, "..") == 0)){
+		checker = _findnext(done, fileinfo);
+	}
 	string oldName = source;
 	string newName = destination;
 	while (checker != -1){

@@ -8,8 +8,9 @@ void removeAllFiles(const string source){
 	if (done == -1){
 		throw exception("cant open remove directory!\n");
 	}
-	checker = _findnext(done, fileinfo);
-	checker = _findnext(done, fileinfo);
+	while ((strcmp(fileinfo->name, ".") == 0) || (strcmp(fileinfo->name, "..") == 0)){
+		checker = _findnext(done, fileinfo);
+	}
 	string src, filename;
 	while (checker != -1){
 		while (checker != -1 && fileinfo->attrib &_A_SUBDIR){

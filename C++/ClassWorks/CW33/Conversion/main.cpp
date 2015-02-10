@@ -27,7 +27,8 @@ int main(){
 	a.print();
 	vector <Fraction> arr(6, 1);
 	vector <Fraction> arrr(6, Fraction(7, 9));
-	for (auto x : arr){
+	for (Fraction x : arr){
+		//тип данных можно заменить словом auto for(auto x: arr)
 		x.print();
 	}
 	//Fraction b = 8;

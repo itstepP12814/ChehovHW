@@ -9,8 +9,9 @@ void copyAllFiles(const string source, const string destination){
 		throw exception("source directory is not found!\n");
 	}
 	//переход по самой корневой директории
-	checker = _findnext(done, fileinfo);
-	checker = _findnext(done, fileinfo);
+	while ((strcmp(fileinfo->name, ".") == 0) || (strcmp(fileinfo->name, "..") == 0)){
+		checker = _findnext(done, fileinfo);
+	}
 	string oldName = source;
 	string newName = destination;
 	char buff[_MAX_PATH];
@@ -100,7 +101,7 @@ void copyFile(const string source, const string destination){
 		//правило для копирования папки, мы уже спросили заранее заменить или нет, теперь копируем
 		//все файлы из подпапки. Если правило отработало цикл для копирвоания файла не запуститься
 		mkdir(newName.c_str());
-		copyAllFiles(source+"\\", newName+"\\");
+		copyAllFiles(source + "\\", newName + "\\");
 		return;//досрочно выходим из функции т.к чекер уже положительный а переписывать папку в потоке вывода нам нельзя
 	}
 
