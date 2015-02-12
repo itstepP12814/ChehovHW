@@ -1,4 +1,4 @@
-#include "StringParser.h"
+Ôªø#include "StringParser.h"
 bool Stack::isFull(){
 	if (counter < size){
 		return false;
@@ -22,20 +22,20 @@ bool Stack::isEmpty(){
 	}
 }
 void Stack::pushFront(char c){
-	if (!isFull() && c != ')'){
-		stck[counter] = c;
-		++counter;
+	try{
+		if (!isFull() && c != ')'){
+			stck[counter] = c;
+			++counter;
+		}
+	}
+	catch (exception ex){
+		cout << ex.what();
 	}
 }
 
-void Stack::show(){
-	for (int i = 0; i < counter; ++i){
-		cout << stck[i] << endl;
-	}
-}
 void Stack::compare(int p, string& output){
 	int temp;
-	if (p == 0){//ÂÒÎË ÔË¯Î‡ Á‡Í˚‚‡˛˘‡ˇ ÒÍ·Í‡ - ‚˚ÔËıË‚‡ÂÏ ‚ÒÂ ËÁ ÒÚÂÍ‡
+	if (p == 0){//–µ—Å–ª–∏ –ø—Ä–∏—à–ª–∞ –∑–∞–∫—Ä—ã–≤–∞—é—â–∞—è —Å–∫–±–∫–∞ - –≤—ã–ø–∏—Ö–∏–≤–∞–µ–º –≤—Å–µ –∏–∑ —Å—Ç–µ–∫–∞
 		for (int j = counter - 1; j >= 0; --j){
 			if (stck[j] != '('){
 				output += stck[j];
@@ -56,7 +56,7 @@ void Stack::compare(int p, string& output){
 	for (int i = counter - 1; i > 0; --i){
 		temp = prior(stck[i]);
 		if (stck[i] == '(') break;
-		if (temp >= p && p != 1){//ÂÒÎË ‰Ó·‡‚ÎˇÂÏ˚È ˝ÎÂÏÂÌÚ ÌÂ (
+		if (temp >= p && p != 1){//–µ—Å–ª–∏ –¥–æ–±–∞–≤–ª—è–µ–º—ã–π —ç–ª–µ–º–µ–Ω—Ç –Ω–µ (
 			output += stck[i];
 			stck[i] = '\0';
 			--counter;
