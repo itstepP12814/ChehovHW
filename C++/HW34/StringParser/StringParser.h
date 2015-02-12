@@ -7,7 +7,7 @@ using namespace std;
 
 string getPolishNotation(const string&);
 double parser(const string&);
-int prior(char);
+int getPriority(char);
 double action(double, double, char);
 
 class Stack{
@@ -15,7 +15,9 @@ public:
 	Stack() : size(12), counter(0){
 		stck = new char[size];
 	}
-	virtual ~Stack(){}
+	virtual ~Stack(){
+		delete[]stck;
+	}
 	char* stck;
 	int size;
 	int counter;

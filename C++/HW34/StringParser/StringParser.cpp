@@ -54,7 +54,7 @@ void Stack::compare(int p, string& output){
 	}
 
 	for (int i = counter - 1; i > 0; --i){
-		temp = prior(stck[i]);
+		temp = getPriority(stck[i]);
 		if (stck[i] == '(') break;
 		if (temp >= p && p != 1){//если добавляемый элемент не (
 			output += stck[i];
