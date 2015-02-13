@@ -1,8 +1,8 @@
 #pragma once
 #include <iostream>
 #include <string>
-#include <stdlib.h>
 #include <exception>
+#include <math.h>
 using namespace std;
 
 string getPolishNotation(const string&);

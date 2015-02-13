@@ -8,7 +8,7 @@ string getPolishNotation(const string& str){//делаем польскую но
 			//ложим цифру в строку
 			output += str[i];
 		}
-		if (str[i] == '+' || str[i] == '-' || str[i] == '*' || str[i] == '/' || str[i] == '(' || str[i] == ')'){//если не число
+		if (str[i] == '+' || str[i] == '-' || str[i] == '*' || str[i] == '/' || str[i] == '(' || str[i] == ')' || str[i]=='^'){//если не число
 			//если стек пуст ложим знак в стек
 			output += ' ';//т.к цифры закончились ложим в результирующую строку пробел для разделения цифр
 			p = getPriority(str[i]);
@@ -42,7 +42,7 @@ double parser(const string& str){//функция парсит результи�
 			}
 		}
 		else {
-			if (str[i] == '+' || str[i] == '-' || str[i] == '*' || str[i] == '/'){
+			if (str[i] == '+' || str[i] == '-' || str[i] == '*' || str[i] == '/' || str[i]=='^'){
 				try{
 					res = action(digits[dig_counter - 2], digits[dig_counter - 1], str[i]);//считаем действие двух операндов
 				}
@@ -59,6 +59,7 @@ double parser(const string& str){//функция парсит результи�
 }
 int getPriority(char c){
 	switch (c){
+	case '^':return 4;
 	case '*':
 	case '/': return 3;
 	case '-':
@@ -74,7 +75,8 @@ double action(double dig1, double dig2, char sign){
 	case '+': return dig1 + dig2;
 	case '-': return dig1 - dig2;
 	case '*': return dig1*dig2;
-	case '/':return dig1 / dig2;
+	case '/': return dig1 / dig2;
+	case '^': return pow(dig1, dig2);
 	default: throw exception("error with operator!\n");
 	}
 }
