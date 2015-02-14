@@ -7,8 +7,8 @@ int main(){
 	char answer;
 	string str, out;
 	double result;
-	do{
-		cout << "Enter the math expression" << endl;
+	do{	
+		cout << "Enter the math expression!!!" << endl;
 		cin >> str;
 		out = '(' + str + ')';
 		out = getPolishNotation(out);
