@@ -89,7 +89,7 @@ public:
 
 int main() {
 	srand(time(NULL));
-	vector<string> names{ "Andrev", "Chashbr", "Kostya", "Max", "Aragorn" };
+	vector<string> names{ "Aragorn", "Andrev", "Chashbr", "Kostya", "Max", "Ilya", "Thireon", "Kirkorov", "Frodo" };
 	//создаем овтобусный парк, 10 автобусов, первый мы инициализируем временным объектом Bus, все последующие инициализируем оператором копирования для временного Bus
 	vector<Bus> park(10, Bus(route.begin()));
 
@@ -98,12 +98,14 @@ int main() {
 		events.insert(pair<int, Event*>(t, new BusEvent(t, park[i])));
 	}
 
-	Passenger* p = NULL;
-	while (events.size() > 0) {
-		if (!p){
-			p = new Passenger(route.begin() + rand() % (route.size() - 1), names[rand() % (names.size() - 1)], rand() % route.size()+1);
-			cout << "passenger " << p->name << " come to " << p->position->name << endl;
+	Passenger** p = new Passenger*[3];//Массив указателей на пассажиров
+	if (p){
+		for (int i = 0; i < 3; ++i){//создали 3 пассажиров и расставили их рандомно на остановках, присвоили рандомные имена из массива имен
+			p[i] = new Passenger(route.begin() + rand() % (route.size() - 1), names[rand() % (names.size() - 1)], rand() % route.size() + 1);
+			cout << "passenger " << p[i]->name << " come to " << p[i]->position->name << endl;
 		}
+	}
+	while (events.size() > 0) {
 
 		// get event
 		Event *ev = events.begin()->second;
@@ -111,29 +113,46 @@ int main() {
 		//мы удаляем совершившиеся событие из очереди событий
 		events.erase(events.begin());
 
-		/* а тут мы как-то обрабатываем свершившееся событие, кстати в момент обработки текущго события
-		в очередь бобавляется следующшее планируемое событие. Т.е одно событие произошло автобус пришел на сотановку, мы удалили
+		/*тут мы как-то обрабатываем свершившееся событие, кстати в момент обработки текущго события
+		в очередь бобавляется следующшее планируемое событие. Т.е одно событие произошло автобус пришел на оcтановку, мы удалили
 		событие из очереди, а тут же автобус запланировал себе приход на следующую остановку, и мы добавлили новое событие в очередь*/
 		ev->process();
 
-		if (p->currentBus == NULL){
-			for (size_t j = 0; j < park.size(); ++j){//посадили пассажира на автобус
-				if (park[j].position == p->position){
-					p->currentBus = &park[j];
-					p->position = p->currentBus->position;
-					cout << "Passenger " << p->name << " take a bus number " << park[j].number << " and need to pass " << p->positionCounter << " stations" << endl;
-					break;
+
+		/*В этих двух циклах выполняется следующее: мы перебираем массив пассажиров, для каждого отдельного пассажира мы проверяем, не сидит 
+		ли он в автобусе p[i]->currentBus==NULL
+		если не сидит мы перебираем автобусы и смотрим какой автобус в данный момент стоит на сотановк, после чего садим пассажира в него*/
+		for (int i = 0; i < 3; ++i){
+			if (p[i] == NULL){// т.к пассажиры будут удаляться из массива, нам нужно проверять есть ли в текущем указателе пассажир, и если его нет мы должны егшо сделать
+				p[i] = new Passenger(route.begin() + rand() % (route.size() - 1), names[rand() % (names.size() - 1)], rand() % route.size() + 1);
+				cout << "passenger " << p[i]->name << " come to " << p[i]->position->name << endl;
+			}
+
+			if (p[i]->currentBus == NULL){
+				for (size_t j = 0; j < park.size(); ++j){//посадили пассажира на автобус
+					if (park[j].position == p[i]->position){
+						p[i]->currentBus = &park[j];
+						p[i]->position = p[i]->currentBus->position;
+						cout << "Passenger " << p[i]->name << " take a bus number " << park[j].number << " on station " << p[i]->position->name <<
+						" and need to pass " << p[i]->positionCounter << " stations" << endl;
+						break;
+					}
 				}
 			}
 		}
 
-		if (p->currentBus != NULL && p->position != p->currentBus->position){
-			p->position = p->currentBus->position;
-			(p->positionCounter)--;
-			if (p->positionCounter == 0){
-				cout << "Passenger " << p->name << " was gone from bus number " << p->currentBus->number << endl;
-				delete p;
-				p = NULL;
+		/*Мы проверяем каждого пассажира, если он сидит в автобусе, и его(пассажира) позиция не равняется текущей позиции автобуса, 
+		значит автобус с остановки уже уехал, прихватив пассажира,
+		и мы меняем положение позиции пассажира, после чего делаем декремент от количеств остановок которое пассажир должен проехать*/
+		for (int i = 0; i < 3; ++i){
+			if (p[i]->currentBus != NULL && p[i]->position != p[i]->currentBus->position){
+				p[i]->position = p[i]->currentBus->position;
+				(p[i]->positionCounter)--;
+				if (p[i]->positionCounter == 0){//пассажир приехал - удаляем его из массива, и делаем указатель равным 0
+					cout << "Passenger " << p[i]->name << " was gone from bus number " << p[i]->currentBus->number << endl;
+					delete p[i];
+					p[i] = NULL;
+				}
 			}
 		}
 
