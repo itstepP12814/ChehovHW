@@ -1,10 +1,8 @@
 ﻿#include <map>
 #include <vector>
 #include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
 #include <string>
-#include <Time.h>
+#include <time.h>
 using namespace std;
 
 //остановка
@@ -91,30 +89,31 @@ public:
 
 int main() {
 	srand(time(NULL));
-	string names[5] = { "Andrev", "Chashbr", "Kostya", "Max", "Aragorn" };
+	vector<string> names{ "Andrev", "Chashbr", "Kostya", "Max", "Aragorn" };
 	//создаем овтобусный парк, 10 автобусов, первый мы инициализируем временным объектом Bus, все последующие инициализируем оператором копирования для временного Bus
 	vector<Bus> park(10, Bus(route.begin()));
 
-	//Passenger p(route.begin(), names[2], 7);
-
-	int t = 0;
-	for (size_t i = 0; i < park.size(); i++) {
-		t = i * 30;
+	for (size_t i = 0; i < park.size(); i++) {//инициализируем массив событий прихода автобусов-по сти расписание
+		int t = i * 30;
 		events.insert(pair<int, Event*>(t, new BusEvent(t, park[i])));
 	}
 
-	//events.insert(pair<int, Event*>(t, new PassengerEvent(t, p)));
-	Passenger* p = new Passenger(route.begin(), names[rand() % 4], rand()%6+1);
+	Passenger* p = NULL;
 	while (events.size() > 0) {
+		if (!p){
+			p = new Passenger(route.begin() + rand() % (route.size() - 1), names[rand() % (names.size() - 1)], rand() % route.size()+1);
+			cout << "passenger " << p->name << " come to " << p->position->name << endl;
+		}
+
 		// get event
 		Event *ev = events.begin()->second;
 		int Time = events.begin()->first;
 		//мы удаляем совершившиеся событие из очереди событий
 		events.erase(events.begin());
 
-		// do something, а тут мы как-то обрабатываем свершившееся событие, кстати в момент обработки текущго события
-		//в очередь бобавляется следующшее планируемое событие. Т.е одно событие произошло автобус пришел на сотановку, мы удалили
-		//событие из очереди, а тут же автобус запланировал себе приход на следующую остановку, и мы добавлили новое событие в очередь
+		/* а тут мы как-то обрабатываем свершившееся событие, кстати в момент обработки текущго события
+		в очередь бобавляется следующшее планируемое событие. Т.е одно событие произошло автобус пришел на сотановку, мы удалили
+		событие из очереди, а тут же автобус запланировал себе приход на следующую остановку, и мы добавлили новое событие в очередь*/
 		ev->process();
 
 		if (p->currentBus == NULL){
@@ -122,7 +121,7 @@ int main() {
 				if (park[j].position == p->position){
 					p->currentBus = &park[j];
 					p->position = p->currentBus->position;
-					cout << "Passenger " << p->name << " take a bus number " << park[j].number << " and need to pass "<<p->positionCounter<<" stations" << endl;
+					cout << "Passenger " << p->name << " take a bus number " << park[j].number << " and need to pass " << p->positionCounter << " stations" << endl;
 					break;
 				}
 			}
@@ -133,18 +132,16 @@ int main() {
 			(p->positionCounter)--;
 			if (p->positionCounter == 0){
 				cout << "Passenger " << p->name << " was gone from bus number " << p->currentBus->number << endl;
-				p->currentBus = NULL;
-				p->positionCounter = rand()%6+1;
+				delete p;
+				p = NULL;
 			}
 		}
 
-		// dispose event
+		// удаляем указатель на событие
 		delete ev;
 
 		int s = time(0);
 		while (s == time(0));
-
 	}
-	delete p;
 
 }
