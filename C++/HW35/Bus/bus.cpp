@@ -105,6 +105,7 @@ int main() {
 			cout << "passenger " << p[i]->name << " come to " << p[i]->position->name << endl;
 		}
 	}
+	//собственно на данный момент на карусели вертятся одновременно3 пассажира, они меняют свои имена и станции но их всегда трое
 	while (events.size() > 0) {
 
 		// get event
