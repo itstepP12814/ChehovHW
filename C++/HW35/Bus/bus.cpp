@@ -1,6 +1,8 @@
 ﻿#include <map>
 #include <vector>
 #include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string>
 #include <Time.h>
 using namespace std;
@@ -18,10 +20,10 @@ vector<Stop> route{
 	Stop(70, "Niamiha"),
 	Stop(90, "Frunzenskaja"),
 	Stop(75, "Maladzezhnaja"),
-	Stop(75, "Frunzenskaja"),
-	Stop(57, "Niamiha"),
-	Stop(50, "Kupalauskaja"),
-	Stop(45, "Pershamajskaja"),
+	Stop(75, "Pushkinskaya"),
+	Stop(57, "Spartiunaya"),
+	Stop(50, "Kuncevshina"),
+	Stop(45, "Kamennaya gorka"),
 };
 
 class Bus {
@@ -93,7 +95,7 @@ int main() {
 	//создаем овтобусный парк, 10 автобусов, первый мы инициализируем временным объектом Bus, все последующие инициализируем оператором копирования для временного Bus
 	vector<Bus> park(10, Bus(route.begin()));
 
-	Passenger p(route.begin(), names[2], 7);
+	//Passenger p(route.begin(), names[2], 7);
 
 	int t = 0;
 	for (size_t i = 0; i < park.size(); i++) {
@@ -102,12 +104,11 @@ int main() {
 	}
 
 	//events.insert(pair<int, Event*>(t, new PassengerEvent(t, p)));
-
+	Passenger* p = new Passenger(route.begin(), names[rand() % 4], rand()%6+1);
 	while (events.size() > 0) {
 		// get event
 		Event *ev = events.begin()->second;
 		int Time = events.begin()->first;
-
 		//мы удаляем совершившиеся событие из очереди событий
 		events.erase(events.begin());
 
@@ -116,23 +117,24 @@ int main() {
 		//событие из очереди, а тут же автобус запланировал себе приход на следующую остановку, и мы добавлили новое событие в очередь
 		ev->process();
 
-		if (p.currentBus == NULL){
+		if (p->currentBus == NULL){
 			for (size_t j = 0; j < park.size(); ++j){//посадили пассажира на автобус
-				if (park[j].position == p.position){
-					p.currentBus = &park[j];
-					cout << "Passenger " << p.name << " take a bus number " << park[j].number << endl;
+				if (park[j].position == p->position){
+					p->currentBus = &park[j];
+					p->position = p->currentBus->position;
+					cout << "Passenger " << p->name << " take a bus number " << park[j].number << " and need to pass "<<p->positionCounter<<" stations" << endl;
 					break;
 				}
 			}
 		}
 
-		if (p.currentBus != NULL){//отсчитываем остановки которые костя катается
-			p.position = p.currentBus->position;
-			--p.positionCounter;
-			if (p.positionCounter == 0){
-				cout << "Passenger " << p.name << " was gone from bus " << p.currentBus->number << endl;
-				p.currentBus = NULL;
-				p.positionCounter = 7;
+		if (p->currentBus != NULL && p->position != p->currentBus->position){
+			p->position = p->currentBus->position;
+			(p->positionCounter)--;
+			if (p->positionCounter == 0){
+				cout << "Passenger " << p->name << " was gone from bus number " << p->currentBus->number << endl;
+				p->currentBus = NULL;
+				p->positionCounter = rand()%6+1;
 			}
 		}
 
@@ -143,5 +145,6 @@ int main() {
 		while (s == time(0));
 
 	}
+	delete p;
 
 }
