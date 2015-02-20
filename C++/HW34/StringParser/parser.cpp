@@ -29,7 +29,7 @@ string getPolishNotation(const string& str){//делаем польскую но
 	return output;
 }
 double parser(const string& str){//функция парсит результирующую польскую запись и считает само выражение
-	double digits[10] = {};//массив для записи цифр по порядку следования в строке
+	double digits[128] = {};//массив для записи цифр по порядку следования в строке
 	int dig_counter = 0;
 	int i;
 	double res;
