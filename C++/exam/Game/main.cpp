@@ -65,15 +65,28 @@ public:
 		}
 	}
 	void goRigth(Field &field){
+		ptrdiff_t dist_row = distance(vector<vector<Cell>>::iterator(field.field.begin()), vector<vector<Cell>>::iterator(currentPosition.first));
+		ptrdiff_t dist_col;
+		if (currentPosition.first == prevPosition.first){
+			dist_col = distance(vector<Cell>::iterator((*currentPosition.first).begin()), vector<Cell>::iterator(prevPosition.second));
+		}
+		else {
+			currentPosition.second = (*currentPosition.first).begin();
+			dist_col = distance(vector<Cell>::iterator((*currentPosition.first).begin()), vector<Cell>::iterator(currentPosition.second));
+
+		}
 
 		if (currentPosition.first != prevPosition.first){//если мы пришли с другого ряда, то поворачиваем соотвественно в пределах текущего ряда
 			if (currentPosition.first > prevPosition.first){//если номер предыдущего ряда меньше, значит мы шли снизу вверх, вправо сдвинемься на одну колонку
 				prevPosition = currentPosition;//делаем текущую позицию предыдущей, после чего высчитываем новую текущую позицию
-				if (currentPosition.second != (*field.field.begin()).end())//проверяем не уперлись ли мы в конец ряда
+				currentPosition.second = (*currentPosition.first).begin() + dist_col;
+				if (currentPosition.second != (*currentPosition.first).end()){//проверяем не уперлись ли мы в конец ряда
 					currentPosition.second = ++currentPosition.second;//идем право
+				}
 			}
 			else {//иначе - шли серху вниз, сдвинемься на одну колонку
 				prevPosition = currentPosition;
+				currentPosition.second = (*currentPosition.first).begin() + dist_col;
 				if (currentPosition.second != (*field.field.begin()).begin())
 					currentPosition.second = --currentPosition.second;//идем лево
 			}
@@ -93,20 +106,28 @@ public:
 		}
 	}
 	void goLeft(Field &field){
-		ptrdiff_t dist_row = distance(vector<vector<Cell>>::iterator(currentPosition.first), vector<vector<Cell>>::iterator(field.field.end()));
+		ptrdiff_t dist_row = distance(vector<vector<Cell>>::iterator(field.field.begin()), vector<vector<Cell>>::iterator(currentPosition.first));//между рядами
+		ptrdiff_t dist_col; //разница между колонками
+		if (currentPosition.first == prevPosition.first){
+			dist_col = distance(vector<Cell>::iterator((*currentPosition.first).begin()), vector<Cell>::iterator(prevPosition.second));
+		}
+		else {
+			currentPosition.second = (*currentPosition.first).begin();
+			dist_col = distance(vector<Cell>::iterator((*currentPosition.first).begin()), vector<Cell>::iterator(currentPosition.second));
 
+		}
 		if (currentPosition.first != prevPosition.first){
 			if (currentPosition.first > prevPosition.first){
 				prevPosition = currentPosition;
-				if (currentPosition.second != ((*currentPosition.first).begin()) )
+				currentPosition.second = (*currentPosition.first).begin()+dist_col;//сдвигаем указатель текущего вектора на величину, на которую был сдвинут такой же итератор у предыдущего вектора
+				if (currentPosition.second != (*currentPosition.first).end()){
 					currentPosition.second = ++currentPosition.second;
-
-				/*if (currentPosition.second != (*field.field.begin()).end())
-					currentPosition.second = ++currentPosition.second;*/
+				}
 			}
 			else {
 				prevPosition = currentPosition;
-				if (currentPosition.second != (*field.field.begin()).begin())
+				currentPosition.second = (*currentPosition.first).begin() + dist_col;
+				if (currentPosition.second != (*currentPosition.first).begin())
 					currentPosition.second = --currentPosition.second;
 			}
 		}
@@ -124,6 +145,15 @@ public:
 		}
 	}
 	void goForward(Field &field){
+		ptrdiff_t dist_row = distance(vector<vector<Cell>>::iterator(field.field.begin()), vector<vector<Cell>>::iterator(currentPosition.first));
+		ptrdiff_t dist_col;
+		if (currentPosition.first == prevPosition.first){
+			dist_col = distance(vector<Cell>::iterator((*currentPosition.first).begin()), vector<Cell>::iterator(prevPosition.second));
+		}
+		else {
+			currentPosition.second = (*currentPosition.first).begin();
+			dist_col = distance(vector<Cell>::iterator((*currentPosition.first).begin()), vector<Cell>::iterator(currentPosition.second));
+		}
 
 		if (currentPosition.first != prevPosition.first){//если индексы рядов не равны значит мы движемсья прямо между рядами
 			if (currentPosition.first > prevPosition.first){//определяем куда именно вниз/вверх
@@ -162,9 +192,13 @@ int main(){
 
 	Field F(pair<int, int>(5, 5), copy);//создание поля 5*5
 	Player P(pair<vector<vector<Cell>>::iterator, vector<Cell>::iterator>(F.beg));//создание и инициализация позиции игрока 0*0
+	P.switcher(2, F);
+	P.switcher(1, F);
 	P.switcher(1, F);
 	P.switcher(2, F);
 	P.switcher(1, F);
+	P.switcher(1, F);
+
 
 
 	////out
