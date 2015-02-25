@@ -31,6 +31,15 @@ public:
 		beg.second = (*field.begin()).begin();
 	};
 	~Field(){};
+	void out() {
+		for (vector<vector<Cell>>::iterator it = field.begin(); it != field.end(); ++it){
+			for (vector<Cell>::iterator it2 = (*it).begin(); it2 != (*it).end(); ++it2){
+				(*it2).show();
+			}
+			cout << endl;
+		}
+		cout << endl;
+	}
 	friend Player;
 	vector<vector<Cell>> field;
 	pair<vector<vector<Cell>>::iterator, vector<Cell>::iterator> beg;
@@ -68,7 +77,7 @@ public:
 		ptrdiff_t dist_row = distance(vector<vector<Cell>>::iterator(field.field.begin()), vector<vector<Cell>>::iterator(currentPosition.first));
 		ptrdiff_t dist_col;
 		if (currentPosition.first == prevPosition.first){
-			dist_col = distance(vector<Cell>::iterator((*currentPosition.first).begin()), vector<Cell>::iterator(prevPosition.second));
+			dist_col = distance(vector<Cell>::iterator((*currentPosition.first).begin()), vector<Cell>::iterator(currentPosition.second));//был prevPosition.second
 		}
 		else {
 			currentPosition.second = (*currentPosition.first).begin();
@@ -109,7 +118,7 @@ public:
 		ptrdiff_t dist_row = distance(vector<vector<Cell>>::iterator(field.field.begin()), vector<vector<Cell>>::iterator(currentPosition.first));//между рядами
 		ptrdiff_t dist_col; //разница между колонками
 		if (currentPosition.first == prevPosition.first){
-			dist_col = distance(vector<Cell>::iterator((*currentPosition.first).begin()), vector<Cell>::iterator(prevPosition.second));
+			dist_col = distance(vector<Cell>::iterator((*currentPosition.first).begin()), vector<Cell>::iterator(currentPosition.second));
 		}
 		else {
 			currentPosition.second = (*currentPosition.first).begin();
@@ -119,7 +128,7 @@ public:
 		if (currentPosition.first != prevPosition.first){
 			if (currentPosition.first > prevPosition.first){
 				prevPosition = currentPosition;
-				currentPosition.second = (*currentPosition.first).begin()+dist_col;//сдвигаем указатель текущего вектора на величину, на которую был сдвинут такой же итератор у предыдущего вектора
+				currentPosition.second = (*currentPosition.first).begin() + dist_col;//сдвигаем указатель текущего вектора на величину, на которую был сдвинут такой же итератор у предыдущего вектора
 				if (currentPosition.second != (*currentPosition.first).end()){
 					currentPosition.second = ++currentPosition.second;
 				}
@@ -134,13 +143,18 @@ public:
 		else {
 			if (currentPosition.second > prevPosition.second){
 				prevPosition = currentPosition;
-				if (currentPosition.first != field.field.end())
-					currentPosition.first = ++currentPosition.first;
+				
+				if (currentPosition.first != field.field.end()){
+					currentPosition.first = --currentPosition.first;
+					currentPosition.second = (*currentPosition.first).begin() + dist_col;
+				}
 			}
 			else {
 				prevPosition = currentPosition;
-				if (currentPosition.first != field.field.begin())
-					currentPosition.first = --currentPosition.first;
+				if (currentPosition.first != field.field.begin()){
+					currentPosition.first = ++currentPosition.first;
+					currentPosition.second = (*currentPosition.first).begin() + dist_col;
+				}
 			}
 		}
 	}
@@ -192,21 +206,21 @@ int main(){
 
 	Field F(pair<int, int>(5, 5), copy);//создание поля 5*5
 	Player P(pair<vector<vector<Cell>>::iterator, vector<Cell>::iterator>(F.beg));//создание и инициализация позиции игрока 0*0
+	P.switcher(1, F);
+	F.out();
 	P.switcher(2, F);
-	P.switcher(1, F);
-	P.switcher(1, F);
+	F.out();
 	P.switcher(2, F);
+	F.out();
 	P.switcher(1, F);
-	P.switcher(1, F);
-
+	F.out();
+	/*P.switcher(2, F);
+	F.out();
+	P.switcher(2, F);*/
+	
 
 
 	////out
-	for (vector<vector<Cell>>::iterator it = F.field.begin(); it != F.field.end(); ++it){
-		for (vector<Cell>::iterator it2 = (*it).begin(); it2 != (*it).end(); ++it2){
-			(*it2).show();
-		}
-		cout << endl;
-	}
+	//F.out();
 	return 0;
 }
