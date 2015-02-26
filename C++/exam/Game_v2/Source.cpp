@@ -22,6 +22,7 @@ public:
 private:
 	bool wasHere;
 };
+
 class Field{
 public:
 	Field(){};
@@ -44,35 +45,38 @@ public:
 	}
 
 	friend Player;
-	vector<vector<Cell>> field;
 	pair<vector<vector<Cell>>::iterator, vector<Cell>::iterator> beg;
+private:
+	vector<vector<Cell>> field;
 
 };
 
 class Player{
 public:
-	Player(){};
-	Player(pair<vector<vector<Cell>>::iterator, vector<Cell>::iterator> pos) : currentPosition(pos), prevPosition(pos){};
+	Player(pair<vector<vector<Cell>>::iterator, vector<Cell>::iterator> pos, Field &F) : currentPosition(pos), prevPosition(pos), field(F){};
 	~Player(){};
 	void mark(){
+		static int count = 0;
 		if ((*currentPosition.second).wasHere == false){
 			(*currentPosition.second).wasHere = true;
 		}
 		else {
-			cout << "Player was here" << endl;
+			cout << "Player was here "<< count << endl;
+			system("pause");
 		}
+		++count;
 	}
 
-	void switcher(int t, Field &field){
+	void switcher(int t){
 		switch (t)
 		{
-		case 1: goRight(field);
+		case 1: goRight();
 			mark();
 			break;
-		case 2: goLeft(field);
+		case 2: goLeft();
 			mark();
 			break;
-		case 3: goForward(field);
+		case 3: goForward();
 			mark();
 			break;
 		default:
@@ -80,9 +84,8 @@ public:
 		}
 	}
 
-	void goRight(Field &field){
-		ptrdiff_t dist_row = distance(vector<vector<Cell>>::iterator(field.field.begin()), vector<vector<Cell>>::iterator(currentPosition.first));
-
+	void goRight(){
+		//ptrdiff_t dist_row = distance(vector<vector<Cell>>::iterator(field.field.begin()), vector<vector<Cell>>::iterator(currentPosition.first));
 		ptrdiff_t dist_col = distance(vector<Cell>::iterator((*currentPosition.first).begin()), vector<Cell>::iterator(currentPosition.second));//был prevPosition.second
 
 		if (currentPosition.first != prevPosition.first){//определяем пришли ли мы вообще с верху/снизу или сбоку
@@ -120,8 +123,7 @@ public:
 		}
 	}
 
-	void goLeft(Field &field){
-		ptrdiff_t dist_row = distance(vector<vector<Cell>>::iterator(field.field.begin()), vector<vector<Cell>>::iterator(currentPosition.first));
+	void goLeft(){
 		ptrdiff_t dist_col = distance(vector<Cell>::iterator((*currentPosition.first).begin()), vector<Cell>::iterator(currentPosition.second));
 
 		if (currentPosition.first != prevPosition.first){//определяем пришли ли мы вообще с верху/снизу или сбоку
@@ -158,8 +160,7 @@ public:
 
 		}
 	}
-	void goForward(Field &field){
-		ptrdiff_t dist_row = distance(vector<vector<Cell>>::iterator(field.field.begin()), vector<vector<Cell>>::iterator(currentPosition.first));
+	void goForward(){
 		ptrdiff_t dist_col = distance(vector<Cell>::iterator((*currentPosition.first).begin()), vector<Cell>::iterator(currentPosition.second));
 
 		if (currentPosition.first != prevPosition.first){
@@ -197,16 +198,17 @@ public:
 private:
 	pair<vector<vector<Cell>>::iterator, vector<Cell>::iterator> prevPosition;
 	pair<vector<vector<Cell>>::iterator, vector<Cell>::iterator> currentPosition;
+	Field &field;
 };
 
 int main(){
 	srand(time(NULL));
 	Cell copy;
 
-	Field F(pair<int, int>(20, 30), copy);//создание поля 5*5
-	Player P(pair<vector<vector<Cell>>::iterator, vector<Cell>::iterator>(F.beg));//создание и инициализация позиции игрока 0*0
-	for (int i = 0; i < 50; ++i){
-		P.switcher(rand() % 3 + 1, F);
+	Field F(pair<int, int>(20, 50), copy);//создание поля 5*5
+	Player P(pair<vector<vector<Cell>>::iterator, vector<Cell>::iterator>(F.beg), F);//создание и инициализация позиции игрока 0*0
+	for (int i = 0; i < 100; ++i){
+		P.switcher(rand() % 3 + 1);
 		F.out();
 		int s = time(0);
 		while (s == time(0));
