@@ -1,13 +1,13 @@
-#include <iostream>
+п»ї#include <iostream>
 #include <vector>
 #include <string>
 #include <stdlib.h>
 #include <time.h>
 using namespace std;
-//9. Игрок делает ходы в плоском мире, разбитом на клетки.
-//На каждом ходу игрок помечает клетку на которой он находится, затем может с равной вероятностью повернуться на + -90 градусов 
-//либо оставить прежнее направление.После этого он делает шаг вперёд на одну клетку, и помечает эту клетку.
-//Сколько ходов сделает игрок пока не дойдёт до ранее помеченной клетки ?
+//9. РРіСЂРѕРє РґРµР»Р°РµС‚ С…РѕРґС‹ РІ РїР»РѕСЃРєРѕРј РјРёСЂРµ, СЂР°Р·Р±РёС‚РѕРј РЅР° РєР»РµС‚РєРё.
+//РќР° РєР°Р¶РґРѕРј С…РѕРґСѓ РёРіСЂРѕРє РїРѕРјРµС‡Р°РµС‚ РєР»РµС‚РєСѓ РЅР° РєРѕС‚РѕСЂРѕР№ РѕРЅ РЅР°С…РѕРґРёС‚СЃСЏ, Р·Р°С‚РµРј РјРѕР¶РµС‚ СЃ СЂР°РІРЅРѕР№ РІРµСЂРѕСЏС‚РЅРѕСЃС‚СЊСЋ РїРѕРІРµСЂРЅСѓС‚СЊСЃСЏ РЅР° + -90 РіСЂР°РґСѓСЃРѕРІ 
+//Р»РёР±Рѕ РѕСЃС‚Р°РІРёС‚СЊ РїСЂРµР¶РЅРµРµ РЅР°РїСЂР°РІР»РµРЅРёРµ.РџРѕСЃР»Рµ СЌС‚РѕРіРѕ РѕРЅ РґРµР»Р°РµС‚ С€Р°Рі РІРїРµСЂС‘Рґ РЅР° РѕРґРЅСѓ РєР»РµС‚РєСѓ, Рё РїРѕРјРµС‡Р°РµС‚ СЌС‚Сѓ РєР»РµС‚РєСѓ.
+//РЎРєРѕР»СЊРєРѕ С…РѕРґРѕРІ СЃРґРµР»Р°РµС‚ РёРіСЂРѕРє РїРѕРєР° РЅРµ РґРѕР№РґС‘С‚ РґРѕ СЂР°РЅРµРµ РїРѕРјРµС‡РµРЅРЅРѕР№ РєР»РµС‚РєРё ?
 
 class Player;
 class Cell{
@@ -45,15 +45,17 @@ public:
 	}
 
 	friend Player;
-	pair<vector<vector<Cell>>::iterator, vector<Cell>::iterator> beg;
+	pair<vector<vector<Cell>>::iterator, vector<Cell>::iterator>& getStart(){
+		return beg;
+	}
 private:
 	vector<vector<Cell>> field;
-
+	pair<vector<vector<Cell>>::iterator, vector<Cell>::iterator> beg;
 };
 
 class Player{
 public:
-	Player(pair<vector<vector<Cell>>::iterator, vector<Cell>::iterator> pos, Field &F) : currentPosition(pos), prevPosition(pos), field(F){};
+	Player(pair<vector<vector<Cell>>::iterator, vector<Cell>::iterator> &pos, Field &F) : currentPosition(pos), prevPosition(pos), field(F){};
 	~Player(){};
 	void mark(){
 		static int count = 0;
@@ -61,8 +63,8 @@ public:
 			(*currentPosition.second).wasHere = true;
 		}
 		else {
-			//cout << "Player was here "<< count << endl;
-			//system("pause");
+			cout << "Player was here! "<< count <<"steps "<< endl;
+			system("pause");
 		}
 		++count;
 	}
@@ -92,33 +94,33 @@ public:
 
 	void goRight(){
 		//ptrdiff_t dist_row = distance(vector<vector<Cell>>::iterator(field.field.begin()), vector<vector<Cell>>::iterator(currentPosition.first));
-		ptrdiff_t dist_col = distance(vector<Cell>::iterator((*currentPosition.first).begin()), vector<Cell>::iterator(currentPosition.second));//был prevPosition.second
+		ptrdiff_t dist_col = distance(vector<Cell>::iterator((*currentPosition.first).begin()), vector<Cell>::iterator(currentPosition.second));//Р±С‹Р» prevPosition.second
 
-		if (currentPosition.first != prevPosition.first){//определяем пришли ли мы вообще с верху/снизу или сбоку
+		if (currentPosition.first != prevPosition.first){//РѕРїСЂРµРґРµР»СЏРµРј РїСЂРёС€Р»Рё Р»Рё РјС‹ РІРѕРѕР±С‰Рµ СЃ РІРµСЂС…Сѓ/СЃРЅРёР·Сѓ РёР»Рё СЃР±РѕРєСѓ
 
-			if (currentPosition.first > prevPosition.first){//смотрим пришли мы снизу или сверху
+			if (currentPosition.first > prevPosition.first){//СЃРјРѕС‚СЂРёРј РїСЂРёС€Р»Рё РјС‹ СЃРЅРёР·Сѓ РёР»Рё СЃРІРµСЂС…Сѓ
 				if (currentPosition.second != (*currentPosition.first).begin()){
 					prevPosition = currentPosition;
 					currentPosition.second = --currentPosition.second;
 				}
 			}
 			else {
-				if (currentPosition.second != (*currentPosition.first).end()-1){//пришли сверху
+				if (currentPosition.second != (*currentPosition.first).end()-1){//РїСЂРёС€Р»Рё СЃРІРµСЂС…Сѓ
 					prevPosition = currentPosition;
 					currentPosition.second = ++currentPosition.second;
 				}
 			}
 
 		}
-		else {//мы пришли сбоку
-			if (currentPosition.second > prevPosition.second){//пришли справа
+		else {//РјС‹ РїСЂРёС€Р»Рё СЃР±РѕРєСѓ
+			if (currentPosition.second > prevPosition.second){//РїСЂРёС€Р»Рё СЃРїСЂР°РІР°
 				if (currentPosition.first != field.field.end()-1){
 					prevPosition = currentPosition;
 					currentPosition.first = ++currentPosition.first;
 					currentPosition.second = (*currentPosition.first).begin() + dist_col;
 				}
 			}
-			else {//слева
+			else {//СЃР»РµРІР°
 				if (currentPosition.first != field.field.begin()){
 					prevPosition = currentPosition;
 					currentPosition.first = --currentPosition.first;
@@ -130,34 +132,33 @@ public:
 	}
 
 	void goLeft(){
-		//ptrdiff_t dist_row = distance(vector<vector<Cell>>::iterator(field.field.begin()), vector<vector<Cell>>::iterator(currentPosition.first));
 		ptrdiff_t dist_col = distance(vector<Cell>::iterator((*currentPosition.first).begin()), vector<Cell>::iterator(currentPosition.second));
 
-		if (currentPosition.first != prevPosition.first){//определяем пришли ли мы вообще с верху/снизу или сбоку
+		if (currentPosition.first != prevPosition.first){//РѕРїСЂРµРґРµР»СЏРµРј РїСЂРёС€Р»Рё Р»Рё РјС‹ РІРѕРѕР±С‰Рµ СЃ РІРµСЂС…Сѓ/СЃРЅРёР·Сѓ РёР»Рё СЃР±РѕРєСѓ
 
-			if (currentPosition.first > prevPosition.first){//смотрим пришли мы снизу или сверху
+			if (currentPosition.first > prevPosition.first){//СЃРјРѕС‚СЂРёРј РїСЂРёС€Р»Рё РјС‹ СЃРЅРёР·Сѓ РёР»Рё СЃРІРµСЂС…Сѓ
 				if (currentPosition.second != (*currentPosition.first).end()-1){
 					prevPosition = currentPosition;
 					currentPosition.second = ++currentPosition.second;
 				}
 			}
 			else {
-				if (currentPosition.second != (*currentPosition.first).begin()){//пришли сверху
+				if (currentPosition.second != (*currentPosition.first).begin()){//РїСЂРёС€Р»Рё СЃРІРµСЂС…Сѓ
 					prevPosition = currentPosition;
 					currentPosition.second = --currentPosition.second;
 				}
 			}
 
 		}
-		else {//мы пришли сбоку
-			if (currentPosition.second > prevPosition.second){//пришли слева
+		else {//РјС‹ РїСЂРёС€Р»Рё СЃР±РѕРєСѓ
+			if (currentPosition.second > prevPosition.second){//РїСЂРёС€Р»Рё СЃР»РµРІР°
 				if (currentPosition.first != field.field.begin()){
 					prevPosition = currentPosition;
 					currentPosition.first = --currentPosition.first;
 					currentPosition.second = (*currentPosition.first).begin() + dist_col;
 				}
 			}
-			else {//справа
+			else {//СЃРїСЂР°РІР°
 				if (currentPosition.first != field.field.end()-1){
 					prevPosition = currentPosition;
 					currentPosition.first = ++currentPosition.first;
@@ -168,7 +169,6 @@ public:
 		}
 	}
 	void goForward(){
-		//ptrdiff_t dist_row = distance(vector<vector<Cell>>::iterator(field.field.begin()), vector<vector<Cell>>::iterator(currentPosition.first));
 		ptrdiff_t dist_col = distance(vector<Cell>::iterator((*currentPosition.first).begin()), vector<Cell>::iterator(currentPosition.second));
 
 		if (currentPosition.first != prevPosition.first){
@@ -213,8 +213,8 @@ int main(){
 	srand(time(NULL));
 	Cell copy;
 
-	Field F(pair<int, int> (15, 20), copy);//создание поля 5*5
-	Player P(pair<vector<vector<Cell>>::iterator, vector<Cell>::iterator> (F.beg), F);//создание и инициализация позиции игрока 0*0
+	Field F(pair<int, int> (22, 38), copy);//СЃРѕР·РґР°РЅРёРµ РїРѕР»СЏ 5*5
+	Player P(pair<vector<vector<Cell>>::iterator, vector<Cell>::iterator> (F.getStart()), F);//СЃРѕР·РґР°РЅРёРµ Рё РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РїРѕР·РёС†РёРё РёРіСЂРѕРєР° 0*0
 	for (int i = 0; i < 100; ++i){
 		P.switcher(rand() % 3 + 1);
 		F.out();
