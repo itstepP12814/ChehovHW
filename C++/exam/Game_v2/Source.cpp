@@ -29,8 +29,8 @@ public:
 	Field(pair<int, int> size, Cell copy) {
 		vector<vector<Cell>> f(size.first, vector<Cell>(size.second, copy));
 		field = f;
-		beg.first = field.begin();
-		beg.second = (*field.begin()).begin();
+		beg.first = field.begin()+6;
+		beg.second = (*beg.first).begin() + 7;
 	};
 	~Field(){};
 
@@ -61,8 +61,8 @@ public:
 			(*currentPosition.second).wasHere = true;
 		}
 		else {
-			cout << "Player was here "<< count << endl;
-			system("pause");
+			//cout << "Player was here "<< count << endl;
+			//system("pause");
 		}
 		++count;
 	}
@@ -70,13 +70,19 @@ public:
 	void switcher(int t){
 		switch (t)
 		{
-		case 1: goRight();
+		case 1: 
+			cout << "right" << endl;
+			goRight();
 			mark();
 			break;
-		case 2: goLeft();
+		case 2:
+			cout << "left" << endl;
+			goLeft();
 			mark();
 			break;
-		case 3: goForward();
+		case 3: 
+			cout << "forward" << endl;
+			goForward();
 			mark();
 			break;
 		default:
@@ -97,7 +103,7 @@ public:
 				}
 			}
 			else {
-				if (currentPosition.second != (*currentPosition.first).end()){//пришли сверху
+				if (currentPosition.second != (*currentPosition.first).end()-1){//пришли сверху
 					prevPosition = currentPosition;
 					currentPosition.second = ++currentPosition.second;
 				}
@@ -106,7 +112,7 @@ public:
 		}
 		else {//мы пришли сбоку
 			if (currentPosition.second > prevPosition.second){//пришли справа
-				if (currentPosition.first != field.field.end()){
+				if (currentPosition.first != field.field.end()-1){
 					prevPosition = currentPosition;
 					currentPosition.first = ++currentPosition.first;
 					currentPosition.second = (*currentPosition.first).begin() + dist_col;
@@ -124,12 +130,13 @@ public:
 	}
 
 	void goLeft(){
+		//ptrdiff_t dist_row = distance(vector<vector<Cell>>::iterator(field.field.begin()), vector<vector<Cell>>::iterator(currentPosition.first));
 		ptrdiff_t dist_col = distance(vector<Cell>::iterator((*currentPosition.first).begin()), vector<Cell>::iterator(currentPosition.second));
 
 		if (currentPosition.first != prevPosition.first){//определяем пришли ли мы вообще с верху/снизу или сбоку
 
 			if (currentPosition.first > prevPosition.first){//смотрим пришли мы снизу или сверху
-				if (currentPosition.second != (*currentPosition.first).end()){
+				if (currentPosition.second != (*currentPosition.first).end()-1){
 					prevPosition = currentPosition;
 					currentPosition.second = ++currentPosition.second;
 				}
@@ -151,7 +158,7 @@ public:
 				}
 			}
 			else {//справа
-				if (currentPosition.first != field.field.end()){
+				if (currentPosition.first != field.field.end()-1){
 					prevPosition = currentPosition;
 					currentPosition.first = ++currentPosition.first;
 					currentPosition.second = (*currentPosition.first).begin() + dist_col;
@@ -161,11 +168,12 @@ public:
 		}
 	}
 	void goForward(){
+		//ptrdiff_t dist_row = distance(vector<vector<Cell>>::iterator(field.field.begin()), vector<vector<Cell>>::iterator(currentPosition.first));
 		ptrdiff_t dist_col = distance(vector<Cell>::iterator((*currentPosition.first).begin()), vector<Cell>::iterator(currentPosition.second));
 
 		if (currentPosition.first != prevPosition.first){
 			if (currentPosition.first > prevPosition.first){
-				if (currentPosition.first != field.field.end()){
+				if (currentPosition.first != field.field.end() - 1){
 					prevPosition = currentPosition;
 					currentPosition.first = ++currentPosition.first;
 					currentPosition.second = (*currentPosition.first).begin() + dist_col;
@@ -181,7 +189,7 @@ public:
 		}
 		else {
 			if (currentPosition.second > prevPosition.second){
-				if (currentPosition.second != (*currentPosition.first).end()){
+				if (currentPosition.second != (*currentPosition.first).end()-1){
 					prevPosition = currentPosition;
 					currentPosition.second = ++currentPosition.second;
 				}
@@ -205,8 +213,8 @@ int main(){
 	srand(time(NULL));
 	Cell copy;
 
-	Field F(pair<int, int>(20, 50), copy);//создание поля 5*5
-	Player P(pair<vector<vector<Cell>>::iterator, vector<Cell>::iterator>(F.beg), F);//создание и инициализация позиции игрока 0*0
+	Field F(pair<int, int> (15, 20), copy);//создание поля 5*5
+	Player P(pair<vector<vector<Cell>>::iterator, vector<Cell>::iterator> (F.beg), F);//создание и инициализация позиции игрока 0*0
 	for (int i = 0; i < 100; ++i){
 		P.switcher(rand() % 3 + 1);
 		F.out();
@@ -214,6 +222,5 @@ int main(){
 		while (s == time(0));
 		system("cls");
 	}
-
 	return 0;
 }
