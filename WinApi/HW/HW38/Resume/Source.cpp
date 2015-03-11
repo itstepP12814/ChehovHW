@@ -1,4 +1,4 @@
-#include <iostream>
+п»ї#include <iostream>
 #include <windows.h>
 #include <tchar.h>
 #include <stdlib.h>
@@ -8,13 +8,13 @@
 
 using namespace std;
 
-LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam); //оконная процедура запускается самой вендой
-//аргументы: дескриптор окна, айди сообщения, доп.параметры, доп.параметры
+LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam); //РѕРєРѕРЅРЅР°СЏ РїСЂРѕС†РµРґСѓСЂР° Р·Р°РїСѓСЃРєР°РµС‚СЃСЏ СЃР°РјРѕР№ РІРµРЅРґРѕР№
+//Р°СЂРіСѓРјРµРЅС‚С‹: РґРµСЃРєСЂРёРїС‚РѕСЂ РѕРєРЅР°, Р°Р№РґРё СЃРѕРѕР±С‰РµРЅРёСЏ, РґРѕРї.РїР°СЂР°РјРµС‚СЂС‹, РґРѕРї.РїР°СЂР°РјРµС‚СЂС‹
 
 void menuAction(WPARAM wParam);//menu switcher
 double charsCount();
 
-TCHAR szClassWindowName[] = TEXT("Мое первое гуи-приложение");//имя класса окна
+TCHAR szClassWindowName[] = TEXT("РњРѕРµ РїРµСЂРІРѕРµ РіСѓРё-РїСЂРёР»РѕР¶РµРЅРёРµ");//РёРјСЏ РєР»Р°СЃСЃР° РѕРєРЅР°
 struct Info{
 	TCHAR title[20];
 	TCHAR text[20];
@@ -23,21 +23,21 @@ struct Info{
 		wcscpy(text, _text);
 	}
 };
-vector<Info*> infos = { new Info(TEXT("Имя и фамилия"), TEXT("Павел Чехов")), new Info(TEXT("Возраст"), TEXT("24")), new Info(TEXT("Место работы"), TEXT("УО БГМУ")),
-new Info(TEXT("Среднее число символов в тексте окон"), TEXT("")) };
+vector<Info*> infos = { new Info(TEXT("РРјСЏ Рё С„Р°РјРёР»РёСЏ"), TEXT("РџР°РІРµР» Р§РµС…РѕРІ")), new Info(TEXT("Р’РѕР·СЂР°СЃС‚"), TEXT("24")), new Info(TEXT("РњРµСЃС‚Рѕ СЂР°Р±РѕС‚С‹"), TEXT("РЈРћ Р‘Р“РњРЈ")),
+new Info(TEXT("РЎСЂРµРґРЅРµРµ С‡РёСЃР»Рѕ СЃРёРјРІРѕР»РѕРІ РІ С‚РµРєСЃС‚Рµ РѕРєРѕРЅ"), TEXT("")) };
 
 
 INT WINAPI _tWinMain(HINSTANCE hInst, HINSTANCE hInstPrev, LPTSTR lpszCmdLine, int nCmdShow){
-	/*арг: дескр приложухи, дескр приложухи которая запустила текущее приложение, указатель на строку для копирования аргументов при запуске из cmd.exe,
-	способ визуализации окна при запуске программы*/
+	/*Р°СЂРі: РґРµСЃРєСЂ РїСЂРёР»РѕР¶СѓС…Рё, РґРµСЃРєСЂ РїСЂРёР»РѕР¶СѓС…Рё РєРѕС‚РѕСЂР°СЏ Р·Р°РїСѓСЃС‚РёР»Р° С‚РµРєСѓС‰РµРµ РїСЂРёР»РѕР¶РµРЅРёРµ, СѓРєР°Р·Р°С‚РµР»СЊ РЅР° СЃС‚СЂРѕРєСѓ РґР»СЏ РєРѕРїРёСЂРѕРІР°РЅРёСЏ Р°СЂРіСѓРјРµРЅС‚РѕРІ РїСЂРё Р·Р°РїСѓСЃРєРµ РёР· cmd.exe,
+	СЃРїРѕСЃРѕР± РІРёР·СѓР°Р»РёР·Р°С†РёРё РѕРєРЅР° РїСЂРё Р·Р°РїСѓСЃРєРµ РїСЂРѕРіСЂР°РјРјС‹*/
 	HWND hWnd;//instance handle of the window class
 	MSG Msg;//message struct
 	WNDCLASSEX wcl;//window struct
 
 	//1 declared window class
-	wcl.cbSize = sizeof(wcl);//собстно размер самой стрктуры окна
-	wcl.style = CS_HREDRAW | CS_VREDRAW;//стили окна говорят о том что окно будет перерисовано по вертикали и горизонтали
-	wcl.lpfnWndProc = WindowProc;//адрес оконной процедуры, которую вызовет винда для обработки сообщений от окна
+	wcl.cbSize = sizeof(wcl);//СЃРѕР±СЃС‚РЅРѕ СЂР°Р·РјРµСЂ СЃР°РјРѕР№ СЃС‚СЂРєС‚СѓСЂС‹ РѕРєРЅР°
+	wcl.style = CS_HREDRAW | CS_VREDRAW;//СЃС‚РёР»Рё РѕРєРЅР° РіРѕРІРѕСЂСЏС‚ Рѕ С‚РѕРј С‡С‚Рѕ РѕРєРЅРѕ Р±СѓРґРµС‚ РїРµСЂРµСЂРёСЃРѕРІР°РЅРѕ РїРѕ РІРµСЂС‚РёРєР°Р»Рё Рё РіРѕСЂРёР·РѕРЅС‚Р°Р»Рё
+	wcl.lpfnWndProc = WindowProc;//Р°РґСЂРµСЃ РѕРєРѕРЅРЅРѕР№ РїСЂРѕС†РµРґСѓСЂС‹, РєРѕС‚РѕСЂСѓСЋ РІС‹Р·РѕРІРµС‚ РІРёРЅРґР° РґР»СЏ РѕР±СЂР°Р±РѕС‚РєРё СЃРѕРѕР±С‰РµРЅРёР№ РѕС‚ РѕРєРЅР°
 	wcl.cbClsExtra = 0;//count bytes, after struct of class window
 	wcl.cbWndExtra = 0;//count bytes, after declared window
 	wcl.hInstance = hInst;//handle current app
@@ -55,10 +55,10 @@ INT WINAPI _tWinMain(HINSTANCE hInst, HINSTANCE hInstPrev, LPTSTR lpszCmdLine, i
 	hWnd = CreateWindowEx(
 		0,//extension window style
 		szClassWindowName,//name of window class
-		TEXT("Резюме"),//title of window
+		TEXT("Р РµР·СЋРјРµ"),//title of window
 		WS_OVERLAPPEDWINDOW,//window style
-		/* Заголовок, рамка, позволяющая менять размеры, системное меню, кнопки развёртывания и свёртывания окна  */
-		CW_USEDEFAULT,	// х
+		/* Р—Р°РіРѕР»РѕРІРѕРє, СЂР°РјРєР°, РїРѕР·РІРѕР»СЏСЋС‰Р°СЏ РјРµРЅСЏС‚СЊ СЂР°Р·РјРµСЂС‹, СЃРёСЃС‚РµРјРЅРѕРµ РјРµРЅСЋ, РєРЅРѕРїРєРё СЂР°Р·РІС‘СЂС‚С‹РІР°РЅРёСЏ Рё СЃРІС‘СЂС‚С‹РІР°РЅРёСЏ РѕРєРЅР°  */
+		CW_USEDEFAULT,	// С…
 		CW_USEDEFAULT,	// y
 		CW_USEDEFAULT,	// width window
 		CW_USEDEFAULT,	// heght window
@@ -77,12 +77,12 @@ INT WINAPI _tWinMain(HINSTANCE hInst, HINSTANCE hInstPrev, LPTSTR lpszCmdLine, i
 	HMENU  SubMenu;
 	MainMenu = CreateMenu();
 	SubMenu = CreateMenu();
-	AppendMenu(MainMenu, MF_POPUP, (UINT_PTR)SubMenu, TEXT("Резюме"));
-	AppendMenu(SubMenu, MF_STRING, 0, TEXT("ФИО"));
-	AppendMenu(SubMenu, MF_STRING, 1, TEXT("Возраст"));
-	AppendMenu(SubMenu, MF_STRING, 2, TEXT("Работа"));
-	AppendMenu(SubMenu, MF_STRING, 3, TEXT("Среднее кол-во символов"));
-	AppendMenu(MainMenu, MF_STRING, 4, TEXT("Выход"));
+	AppendMenu(MainMenu, MF_POPUP, (UINT_PTR)SubMenu, TEXT("Р РµР·СЋРјРµ"));
+	AppendMenu(SubMenu, MF_STRING, 0, TEXT("Р¤РРћ"));
+	AppendMenu(SubMenu, MF_STRING, 1, TEXT("Р’РѕР·СЂР°СЃС‚"));
+	AppendMenu(SubMenu, MF_STRING, 2, TEXT("Р Р°Р±РѕС‚Р°"));
+	AppendMenu(SubMenu, MF_STRING, 3, TEXT("РЎСЂРµРґРЅРµРµ РєРѕР»-РІРѕ СЃРёРјРІРѕР»РѕРІ"));
+	AppendMenu(MainMenu, MF_STRING, 4, TEXT("Р’С‹С…РѕРґ"));
 
 	SetMenu(hWnd, MainMenu);
 
@@ -127,12 +127,12 @@ void menuAction(WPARAM wParam){
 	case 3:{
 		double all_chars = charsCount();
 		TCHAR buff[50];
-		swprintf(buff, TEXT("Среднее число %f символов"), all_chars);//wsprintf doesnt work with qualifier %f
+		swprintf(buff, TEXT("РЎСЂРµРґРЅРµРµ С‡РёСЃР»Рѕ %f СЃРёРјРІРѕР»РѕРІ"), all_chars);//wsprintf doesnt work with qualifier %f
 		res = MessageBox(0, buff, (*infos[2]).title, MB_OK | MB_ICONINFORMATION);
 	}
 		   break;
 	case 4:
-		res = MessageBox(0, TEXT("Вы уверены что хотите выйти?"), TEXT("Выход"), MB_YESNO | MB_ICONINFORMATION);
+		res = MessageBox(0, TEXT("Р’С‹ СѓРІРµСЂРµРЅС‹ С‡С‚Рѕ С…РѕС‚РёС‚Рµ РІС‹Р№С‚Рё?"), TEXT("Р’С‹С…РѕРґ"), MB_YESNO | MB_ICONINFORMATION);
 		if (res == IDYES) PostQuitMessage(0);
 		break;
 	}
