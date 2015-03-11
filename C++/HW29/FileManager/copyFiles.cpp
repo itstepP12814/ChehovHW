@@ -84,7 +84,7 @@ void copyFile(const string source, const string destination){
 	string newName = destination + fileinfo->name;//формируем имя копии
 	ifstream fin;
 	ofstream fout;
-	char buff[256];
+	char buff[_MAX_PATH];
 	indicatorOfSameFile = _findfirst(newName.c_str(), same_fileinfo);
 	if (indicatorOfSameFile != -1){//проверяем существует такой же файл в другой директории
 		if (answer(same_fileinfo)){//если существует спрашиваем че делать. если добро-переписываем
@@ -106,8 +106,8 @@ void copyFile(const string source, const string destination){
 	}
 
 	if (checkerForFile){
-		fin.open(source);
-		fout.open(newName);
+		fin.open(source, ios::binary);
+		fout.open(newName, ios::binary);
 		if (!fin.is_open()){
 			throw exception("cant open file!\n");
 		}
