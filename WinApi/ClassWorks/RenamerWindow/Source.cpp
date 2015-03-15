@@ -5,7 +5,7 @@
 LRESULT CALLBACK WindowProc(HWND, UINT, WPARAM, LPARAM);
 BOOL CALLBACK EnumWindowsProc(HWND, LPARAM);
 
-TCHAR szClassWindow[] = TEXT("Класс окна");
+TCHAR szClassWindow[] = TEXT("РљР»Р°СЃСЃ РѕРєРЅР°");
 
 INT WINAPI _tWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPTSTR lpszCmdLine, int nCmdShow){
 	HWND hWnd;
@@ -17,44 +17,44 @@ INT WINAPI _tWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPTSTR lpszCmdLine, i
 	wcl.lpfnWndProc = WindowProc;
 	wcl.cbClsExtra = 0;
 	wcl.cbWndExtra = 0;
-	wcl.hInstance = hInst;	// дескриптор данного приложения
-	wcl.hIcon = LoadIcon(NULL, IDI_APPLICATION);	// загрузка стандартной иконки
-	wcl.hCursor = LoadCursor(NULL, IDC_ARROW);	// загрузка стандартного курсора	
-	wcl.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);	// заполнение окна белым цветом
-	wcl.lpszMenuName = NULL;	// приложение не содержит меню
-	wcl.lpszClassName = szClassWindow;	// имя класса окна
-	wcl.hIconSm = NULL;	// отсутствие маленькой иконки для связи с классом окна
+	wcl.hInstance = hInst;	// РґРµСЃРєСЂРёРїС‚РѕСЂ РґР°РЅРЅРѕРіРѕ РїСЂРёР»РѕР¶РµРЅРёСЏ
+	wcl.hIcon = LoadIcon(NULL, IDI_APPLICATION);	// Р·Р°РіСЂСѓР·РєР° СЃС‚Р°РЅРґР°СЂС‚РЅРѕР№ РёРєРѕРЅРєРё
+	wcl.hCursor = LoadCursor(NULL, IDC_ARROW);	// Р·Р°РіСЂСѓР·РєР° СЃС‚Р°РЅРґР°СЂС‚РЅРѕРіРѕ РєСѓСЂСЃРѕСЂР°	
+	wcl.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);	// Р·Р°РїРѕР»РЅРµРЅРёРµ РѕРєРЅР° Р±РµР»С‹Рј С†РІРµС‚РѕРј
+	wcl.lpszMenuName = NULL;	// РїСЂРёР»РѕР¶РµРЅРёРµ РЅРµ СЃРѕРґРµСЂР¶РёС‚ РјРµРЅСЋ
+	wcl.lpszClassName = szClassWindow;	// РёРјСЏ РєР»Р°СЃСЃР° РѕРєРЅР°
+	wcl.hIconSm = NULL;	// РѕС‚СЃСѓС‚СЃС‚РІРёРµ РјР°Р»РµРЅСЊРєРѕР№ РёРєРѕРЅРєРё РґР»СЏ СЃРІСЏР·Рё СЃ РєР»Р°СЃСЃРѕРј РѕРєРЅР°
 
-	// 2. Регистрация класса окна
+	// 2. Р РµРіРёСЃС‚СЂР°С†РёСЏ РєР»Р°СЃСЃР° РѕРєРЅР°
 	if (!RegisterClassEx(&wcl))
-		return 0; // при неудачной регистрации - выход
+		return 0; // РїСЂРё РЅРµСѓРґР°С‡РЅРѕР№ СЂРµРіРёСЃС‚СЂР°С†РёРё - РІС‹С…РѕРґ
 
-	// 3. Создание окна
-	// создается окно и  переменной hWnd присваивается дескриптор окна
+	// 3. РЎРѕР·РґР°РЅРёРµ РѕРєРЅР°
+	// СЃРѕР·РґР°РµС‚СЃСЏ РѕРєРЅРѕ Рё  РїРµСЂРµРјРµРЅРЅРѕР№ hWnd РїСЂРёСЃРІР°РёРІР°РµС‚СЃСЏ РґРµСЃРєСЂРёРїС‚РѕСЂ РѕРєРЅР°
 	hWnd = CreateWindowEx(
-		0,		// расширенный стиль окна
-		szClassWindow,	//имя класса окна
-		TEXT("Бульбуляторщик"), // заголовок окна
-		WS_OVERLAPPEDWINDOW,				// стиль окна
-		/* Заголовок, рамка, позволяющая менять размеры, системное меню, кнопки развёртывания и свёртывания окна  */
-		CW_USEDEFAULT,	// х-координата левого верхнего угла окна
-		CW_USEDEFAULT,	// y-координата левого верхнего угла окна
-		CW_USEDEFAULT,	// ширина окна
-		CW_USEDEFAULT,	// высота окна
-		NULL,			// дескриптор родительского окна
-		NULL,			// дескриптор меню окна
-		hInst,		// идентификатор приложения, создавшего окно
-		NULL);		// указатель на область данных приложения
+		0,		// СЂР°СЃС€РёСЂРµРЅРЅС‹Р№ СЃС‚РёР»СЊ РѕРєРЅР°
+		szClassWindow,	//РёРјСЏ РєР»Р°СЃСЃР° РѕРєРЅР°
+		TEXT("Р‘СѓР»СЊР±СѓР»СЏС‚РѕСЂС‰РёРє"), // Р·Р°РіРѕР»РѕРІРѕРє РѕРєРЅР°
+		WS_OVERLAPPEDWINDOW,				// СЃС‚РёР»СЊ РѕРєРЅР°
+		/* Р—Р°РіРѕР»РѕРІРѕРє, СЂР°РјРєР°, РїРѕР·РІРѕР»СЏСЋС‰Р°СЏ РјРµРЅСЏС‚СЊ СЂР°Р·РјРµСЂС‹, СЃРёСЃС‚РµРјРЅРѕРµ РјРµРЅСЋ, РєРЅРѕРїРєРё СЂР°Р·РІС‘СЂС‚С‹РІР°РЅРёСЏ Рё СЃРІС‘СЂС‚С‹РІР°РЅРёСЏ РѕРєРЅР°  */
+		CW_USEDEFAULT,	// С…-РєРѕРѕСЂРґРёРЅР°С‚Р° Р»РµРІРѕРіРѕ РІРµСЂС…РЅРµРіРѕ СѓРіР»Р° РѕРєРЅР°
+		CW_USEDEFAULT,	// y-РєРѕРѕСЂРґРёРЅР°С‚Р° Р»РµРІРѕРіРѕ РІРµСЂС…РЅРµРіРѕ СѓРіР»Р° РѕРєРЅР°
+		CW_USEDEFAULT,	// С€РёСЂРёРЅР° РѕРєРЅР°
+		CW_USEDEFAULT,	// РІС‹СЃРѕС‚Р° РѕРєРЅР°
+		NULL,			// РґРµСЃРєСЂРёРїС‚РѕСЂ СЂРѕРґРёС‚РµР»СЊСЃРєРѕРіРѕ РѕРєРЅР°
+		NULL,			// РґРµСЃРєСЂРёРїС‚РѕСЂ РјРµРЅСЋ РѕРєРЅР°
+		hInst,		// РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РїСЂРёР»РѕР¶РµРЅРёСЏ, СЃРѕР·РґР°РІС€РµРіРѕ РѕРєРЅРѕ
+		NULL);		// СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РѕР±Р»Р°СЃС‚СЊ РґР°РЅРЅС‹С… РїСЂРёР»РѕР¶РµРЅРёСЏ
 
-	// 4. Отображение окна
+	// 4. РћС‚РѕР±СЂР°Р¶РµРЅРёРµ РѕРєРЅР°
 	ShowWindow(hWnd, nCmdShow);
-	UpdateWindow(hWnd); // перерисовка окна
+	UpdateWindow(hWnd); // РїРµСЂРµСЂРёСЃРѕРІРєР° РѕРєРЅР°
 
-	// 5. Запуск цикла обработки сообщений
-	while (GetMessage(&Msg, NULL, 0, 0)) // получение очередного сообщения из очереди сообщений
+	// 5. Р—Р°РїСѓСЃРє С†РёРєР»Р° РѕР±СЂР°Р±РѕС‚РєРё СЃРѕРѕР±С‰РµРЅРёР№
+	while (GetMessage(&Msg, NULL, 0, 0)) // РїРѕР»СѓС‡РµРЅРёРµ РѕС‡РµСЂРµРґРЅРѕРіРѕ СЃРѕРѕР±С‰РµРЅРёСЏ РёР· РѕС‡РµСЂРµРґРё СЃРѕРѕР±С‰РµРЅРёР№
 	{
-		TranslateMessage(&Msg);	// трансляция сообщения
-		DispatchMessage(&Msg);	// диспетчеризация сообщений
+		TranslateMessage(&Msg);	// С‚СЂР°РЅСЃР»СЏС†РёСЏ СЃРѕРѕР±С‰РµРЅРёСЏ
+		DispatchMessage(&Msg);	// РґРёСЃРїРµС‚С‡РµСЂРёР·Р°С†РёСЏ СЃРѕРѕР±С‰РµРЅРёР№
 	}
 	return Msg.wParam;
 }
@@ -67,15 +67,15 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lPar
 	{
 		int res = MessageBox(
 			0,
-			TEXT("Вы действительно хотите?"),
-			TEXT("Скажите пожалуйста!"),
+			TEXT("Р’С‹ РґРµР№СЃС‚РІРёС‚РµР»СЊРЅРѕ С…РѕС‚РёС‚Рµ?"),
+			TEXT("РЎРєР°Р¶РёС‚Рµ РїРѕР¶Р°Р»СѓР№СЃС‚Р°!"),
 			MB_YESNO | MB_ICONINFORMATION);
 		if (res == IDYES){
 			DestroyWindow(hWnd);
 		}
 	} break;
 	case WM_DESTROY:
-		PostQuitMessage(0); // посылка сообщения WM_QUIT
+		PostQuitMessage(0); // РїРѕСЃС‹Р»РєР° СЃРѕРѕР±С‰РµРЅРёСЏ WM_QUIT
 		break;
 	case WM_KEYDOWN:
 		if (wParam == VK_CONTROL){
@@ -83,8 +83,8 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lPar
 		} 
 		break;
 	default:
-		// все сообщения, которые не обрабатываются в данной оконной функции 
-		// направляются обратно Windows на обработку по умолчанию
+		// РІСЃРµ СЃРѕРѕР±С‰РµРЅРёСЏ, РєРѕС‚РѕСЂС‹Рµ РЅРµ РѕР±СЂР°Р±Р°С‚С‹РІР°СЋС‚СЃСЏ РІ РґР°РЅРЅРѕР№ РѕРєРѕРЅРЅРѕР№ С„СѓРЅРєС†РёРё 
+		// РЅР°РїСЂР°РІР»СЏСЋС‚СЃСЏ РѕР±СЂР°С‚РЅРѕ Windows РЅР° РѕР±СЂР°Р±РѕС‚РєСѓ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
 		return DefWindowProc(hWnd, uMessage, wParam, lParam);
 }
 return 0;
@@ -92,12 +92,12 @@ return 0;
 
 BOOL CALLBACK EnumWindowsProc(HWND hWnd, LPARAM lParam){
 	TCHAR caption[_MAX_PATH] = { 0 }, classname[100] = { 0 }, text[500] = { 0 };
-	GetWindowText(hWnd, caption, 100);//получаем текст заголовка нашего окна
-	GetClassName(hWnd, classname, 100);//получаем имя класса окна
+	GetWindowText(hWnd, caption, 100);//РїРѕР»СѓС‡Р°РµРј С‚РµРєСЃС‚ Р·Р°РіРѕР»РѕРІРєР° РЅР°С€РµРіРѕ РѕРєРЅР°
+	GetClassName(hWnd, classname, 100);//РїРѕР»СѓС‡Р°РµРј РёРјСЏ РєР»Р°СЃСЃР° РѕРєРЅР°
 
 	if (!lstrcmp(classname, TEXT("CalcFrame"))) {
-		int res = MessageBox(0, TEXT("Сделали"), TEXT("Готово"), MB_OK | MB_ICONINFORMATION);
-		SetWindowText(hWnd, TEXT("Бульбулятор"));
+		int res = MessageBox(0, TEXT("РЎРґРµР»Р°Р»Рё"), TEXT("Р“РѕС‚РѕРІРѕ"), MB_OK | MB_ICONINFORMATION);
+		SetWindowText(hWnd, TEXT("Р‘СѓР»СЊР±СѓР»СЏС‚РѕСЂ"));
 	}
 	return TRUE;
 }
