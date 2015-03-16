@@ -1,10 +1,15 @@
 ﻿#include <windows.h>
+#include <WinUser.h>
 #include <tchar.h>
 #include <stdlib.h>
 #include <time.h>
 #define ID_TIMER 1
 LRESULT CALLBACK WindowProc(HWND, UINT, WPARAM, LPARAM);
-void CALLBACK TimerProc(HWND hwnd, UINT msg, UINT_PTR idTimer, DWORD dwTime);
+void CALLBACK TimerProcRandom(HWND hwnd, UINT msg, UINT_PTR idTimer, DWORD dwTime);
+void CALLBACK TimerProcLeft(HWND hwnd, UINT msg, UINT_PTR idTimer, DWORD dwTime);
+void CALLBACK TimerProcRight(HWND hwnd, UINT msg, UINT_PTR idTimer, DWORD dwTime);
+void CALLBACK TimerProcUp(HWND hwnd, UINT msg, UINT_PTR idTimer, DWORD dwTime);
+void CALLBACK TimerProcDown(HWND hwnd, UINT msg, UINT_PTR idTimer, DWORD dwTime);
 TCHAR szClassWindow[] = TEXT("Ползущий калькулятор");
 
 int WINAPI _tWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPTSTR lpszCmdLine, int nCmdShow)
@@ -52,7 +57,7 @@ int WINAPI _tWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPTSTR lpszCmdLine, i
 
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 {
-	HWND hCalc; int res = 0;
+	HWND hCalc; int res = 0; UINT_PTR nTimerID;
 	switch (uMessage)
 	{
 	case WM_COMMAND:{
@@ -65,8 +70,7 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lPar
 			else res = MessageBox(0, TEXT("Ненайдено"), TEXT("=("), MB_OK | MB_ICONINFORMATION);
 		} break;
 		case 1:{
-			UINT_PTR nTimerID;
-			nTimerID = SetTimer(hWnd, ID_TIMER, 1, TimerProc);
+			nTimerID = SetTimer(hWnd, ID_TIMER, 1, TimerProcRandom);
 		} break;
 		case 2:
 			KillTimer(hWnd, ID_TIMER);
@@ -78,6 +82,24 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lPar
 		default: break;
 		}
 	} break;
+	case WM_KEYDOWN:{
+		KillTimer(hWnd, ID_TIMER);
+		switch (wParam){
+		case VK_LEFT:
+			nTimerID = SetTimer(hWnd, ID_TIMER, 1, TimerProcLeft);
+			break;
+		case VK_RIGHT:
+			nTimerID = SetTimer(hWnd, ID_TIMER, 1, TimerProcRight);
+			break;
+		case VK_UP:
+			nTimerID = SetTimer(hWnd, ID_TIMER, 1, TimerProcUp);
+			break;
+		case VK_DOWN:
+			nTimerID = SetTimer(hWnd, ID_TIMER, 1, TimerProcDown);
+			break;
+		default: break;
+		}
+	}break;
 	case WM_DESTROY:
 		KillTimer(hWnd, ID_TIMER);
 		PostQuitMessage(0);
@@ -90,7 +112,7 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lPar
 	}
 	return 0;
 }
-void CALLBACK TimerProc(HWND hWnd, UINT msg, UINT_PTR idTimer, DWORD dwTime){
+void CALLBACK TimerProcRandom(HWND hWnd, UINT msg, UINT_PTR idTimer, DWORD dwTime){
 	srand(time(NULL));
 	HWND hCalc = FindWindow(TEXT("CalcFrame"), NULL);
 	RECT oldRect;
@@ -104,5 +126,57 @@ void CALLBACK TimerProc(HWND hWnd, UINT msg, UINT_PTR idTimer, DWORD dwTime){
 	}
 	else {
 		MoveWindow(hCalc, rand() % 800, rand() % 400, width, height, TRUE);
+	}
+}
+void CALLBACK TimerProcLeft(HWND hWnd, UINT msg, UINT_PTR idTimer, DWORD dwTime){
+	srand(time(NULL));
+	HWND hCalc = FindWindow(TEXT("CalcFrame"), NULL);
+	RECT oldRect;
+	GetWindowRect(hCalc, &oldRect);
+	int top = oldRect.top;
+	int left = oldRect.left;
+	int width = oldRect.right - oldRect.left;
+	int height = oldRect.bottom - oldRect.top;
+	if (left > 0){
+		MoveWindow(hCalc, left - 5, top, width, height, TRUE);
+	}
+}
+void CALLBACK TimerProcRight(HWND hWnd, UINT msg, UINT_PTR idTimer, DWORD dwTime){
+	srand(time(NULL));
+	HWND hCalc = FindWindow(TEXT("CalcFrame"), NULL);
+	RECT oldRect;
+	GetWindowRect(hCalc, &oldRect);
+	int top = oldRect.top;
+	int left = oldRect.left;
+	int width = oldRect.right - oldRect.left;
+	int height = oldRect.bottom - oldRect.top;
+	if (left <1366){
+		MoveWindow(hCalc, left + 5, top, width, height, TRUE);
+	}
+}
+void CALLBACK TimerProcDown(HWND hWnd, UINT msg, UINT_PTR idTimer, DWORD dwTime){
+	srand(time(NULL));
+	HWND hCalc = FindWindow(TEXT("CalcFrame"), NULL);
+	RECT oldRect;
+	GetWindowRect(hCalc, &oldRect);
+	int top = oldRect.top;
+	int left = oldRect.left;
+	int width = oldRect.right - oldRect.left;
+	int height = oldRect.bottom - oldRect.top;
+	if ( top<768){
+		MoveWindow(hCalc, left, top+5, width, height, TRUE);
+	}
+}
+void CALLBACK TimerProcUp(HWND hWnd, UINT msg, UINT_PTR idTimer, DWORD dwTime){
+	srand(time(NULL));
+	HWND hCalc = FindWindow(TEXT("CalcFrame"), NULL);
+	RECT oldRect;
+	GetWindowRect(hCalc, &oldRect);
+	int top = oldRect.top;
+	int left = oldRect.left;
+	int width = oldRect.right - oldRect.left;
+	int height = oldRect.bottom - oldRect.top;
+	if (top>0){
+		MoveWindow(hCalc, left, top - 5, width, height, TRUE);
 	}
 }
