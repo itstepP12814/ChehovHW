@@ -115,6 +115,7 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lPar
 void CALLBACK TimerProcRandom(HWND hWnd, UINT msg, UINT_PTR idTimer, DWORD dwTime){
 	srand(time(NULL));
 	HWND hCalc = FindWindow(TEXT("CalcFrame"), NULL);
+	if (!hCalc) return;
 	RECT oldRect;
 	GetWindowRect(hCalc, &oldRect);
 	int top = oldRect.top;
@@ -131,6 +132,7 @@ void CALLBACK TimerProcRandom(HWND hWnd, UINT msg, UINT_PTR idTimer, DWORD dwTim
 void CALLBACK TimerProcLeft(HWND hWnd, UINT msg, UINT_PTR idTimer, DWORD dwTime){
 	srand(time(NULL));
 	HWND hCalc = FindWindow(TEXT("CalcFrame"), NULL);
+	if (!hCalc) return;
 	RECT oldRect;
 	GetWindowRect(hCalc, &oldRect);
 	int top = oldRect.top;
@@ -144,6 +146,7 @@ void CALLBACK TimerProcLeft(HWND hWnd, UINT msg, UINT_PTR idTimer, DWORD dwTime)
 void CALLBACK TimerProcRight(HWND hWnd, UINT msg, UINT_PTR idTimer, DWORD dwTime){
 	srand(time(NULL));
 	HWND hCalc = FindWindow(TEXT("CalcFrame"), NULL);
+	if (!hCalc) return;
 	RECT oldRect;
 	GetWindowRect(hCalc, &oldRect);
 	int top = oldRect.top;
@@ -157,6 +160,7 @@ void CALLBACK TimerProcRight(HWND hWnd, UINT msg, UINT_PTR idTimer, DWORD dwTime
 void CALLBACK TimerProcDown(HWND hWnd, UINT msg, UINT_PTR idTimer, DWORD dwTime){
 	srand(time(NULL));
 	HWND hCalc = FindWindow(TEXT("CalcFrame"), NULL);
+	if (!hCalc) return;
 	RECT oldRect;
 	GetWindowRect(hCalc, &oldRect);
 	int top = oldRect.top;
@@ -170,6 +174,7 @@ void CALLBACK TimerProcDown(HWND hWnd, UINT msg, UINT_PTR idTimer, DWORD dwTime)
 void CALLBACK TimerProcUp(HWND hWnd, UINT msg, UINT_PTR idTimer, DWORD dwTime){
 	srand(time(NULL));
 	HWND hCalc = FindWindow(TEXT("CalcFrame"), NULL);
+	if (!hCalc) return;
 	RECT oldRect;
 	GetWindowRect(hCalc, &oldRect);
 	int top = oldRect.top;
