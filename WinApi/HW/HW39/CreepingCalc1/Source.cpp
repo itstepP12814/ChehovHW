@@ -3,6 +3,7 @@
 #include <tchar.h>
 #include <stdlib.h>
 #include <time.h>
+#include "resource.h"
 #define ID_TIMER 1
 LRESULT CALLBACK WindowProc(HWND, UINT, WPARAM, LPARAM);
 void CALLBACK TimerProcRandom(HWND hwnd, UINT msg, UINT_PTR idTimer, DWORD dwTime);
@@ -11,6 +12,7 @@ void CALLBACK TimerProcRight(HWND hwnd, UINT msg, UINT_PTR idTimer, DWORD dwTime
 void CALLBACK TimerProcUp(HWND hwnd, UINT msg, UINT_PTR idTimer, DWORD dwTime);
 void CALLBACK TimerProcDown(HWND hwnd, UINT msg, UINT_PTR idTimer, DWORD dwTime);
 TCHAR szClassWindow[] = TEXT("Ползущий калькулятор");
+HCURSOR hCursor1, hCursor2, hCursor3;
 
 int WINAPI _tWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPTSTR lpszCmdLine, int nCmdShow)
 {
@@ -60,6 +62,14 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lPar
 	HWND hCalc; int res = 0; UINT_PTR nTimerID;
 	switch (uMessage)
 	{
+	case WM_CREATE:{
+		HINSTANCE hInstance = GetModuleHandle(0);
+		if (hInstance){
+			hCursor1 = LoadCursor(hInstance, MAKEINTRESOURCE(IDC_NODROP));
+			hCursor2 = LoadCursor(hInstance, MAKEINTRESOURCE(IDC_POINTER));
+			hCursor3 = LoadCursor(hInstance, MAKEINTRESOURCE(IDC_POINTER_COPY));
+		}
+	}   break;
 	case WM_COMMAND:{
 		switch (wParam){
 		case 0:{
@@ -85,6 +95,18 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lPar
 	case WM_KEYDOWN:{
 		KillTimer(hWnd, ID_TIMER);
 		switch (wParam){
+		case '1':
+			SetCursor(hCursor1);
+			SetClassLong(hWnd, GCL_HCURSOR, LONG(hCursor1)); // устанавливаем курсор
+			break;
+		case '2':
+			SetCursor(hCursor2);
+			SetClassLong(hWnd, GCL_HCURSOR, LONG(hCursor2));
+			break;
+		case '3':
+			SetCursor(hCursor3);
+			SetClassLong(hWnd, GCL_HCURSOR, LONG(hCursor3));
+			break;
 		case VK_LEFT:
 			nTimerID = SetTimer(hWnd, ID_TIMER, 1, TimerProcLeft);
 			break;
@@ -153,7 +175,7 @@ void CALLBACK TimerProcRight(HWND hWnd, UINT msg, UINT_PTR idTimer, DWORD dwTime
 	int left = oldRect.left;
 	int width = oldRect.right - oldRect.left;
 	int height = oldRect.bottom - oldRect.top;
-	if (left <1366){
+	if (left < 1366){
 		MoveWindow(hCalc, left + 5, top, width, height, TRUE);
 	}
 }
@@ -167,8 +189,8 @@ void CALLBACK TimerProcDown(HWND hWnd, UINT msg, UINT_PTR idTimer, DWORD dwTime)
 	int left = oldRect.left;
 	int width = oldRect.right - oldRect.left;
 	int height = oldRect.bottom - oldRect.top;
-	if ( top<768){
-		MoveWindow(hCalc, left, top+5, width, height, TRUE);
+	if (top < 768){
+		MoveWindow(hCalc, left, top + 5, width, height, TRUE);
 	}
 }
 void CALLBACK TimerProcUp(HWND hWnd, UINT msg, UINT_PTR idTimer, DWORD dwTime){
@@ -181,7 +203,7 @@ void CALLBACK TimerProcUp(HWND hWnd, UINT msg, UINT_PTR idTimer, DWORD dwTime){
 	int left = oldRect.left;
 	int width = oldRect.right - oldRect.left;
 	int height = oldRect.bottom - oldRect.top;
-	if (top>0){
+	if (top > 0){
 		MoveWindow(hCalc, left, top - 5, width, height, TRUE);
 	}
 }
