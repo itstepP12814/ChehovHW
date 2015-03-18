@@ -46,6 +46,7 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 	switch (message)
 	{
 	case WM_CREATE: {
+		//инициализация дескрипторов курсоров
 		HINSTANCE hInstance = GetModuleHandle(0);
 		hCursor1 = LoadCursor(hInstance, MAKEINTRESOURCE(IDC_NODROP));
 		hCursor2 = LoadCursor(hInstance, MAKEINTRESOURCE(IDC_POINTER));
