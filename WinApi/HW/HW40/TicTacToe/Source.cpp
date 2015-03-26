@@ -2,21 +2,31 @@
 #include <Windows.h>
 #include <tchar.h>
 #include <vector>
+#include <stdlib.h>
+#include <time.h>
 #include "resource.h"
 using namespace std;
+#define AI_STEP 111555 //это код моего собственного сообщения, означающего что ИИ может сделать ход
 
 struct CELL{
 	HWND hWnd;
-	int stat;
+	int stat;//статус 1-кнопка была нажата 0 - не нажата
+	int sign;//ID знака 1- крестик 0-нолик
 };
+
 BOOL CALLBACK DlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+int Compare();
 vector <CELL> CellVector;
 HBITMAP hbmX, hbmO;
+
+//отладочное окно
+TCHAR szText[30]; HWND hInfo;
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpszCmdLine, int nCmdShow)
 {
 	return DialogBox(hInstance, MAKEINTRESOURCE(IDD_DIALOG1), NULL, DlgProc);
 }
 BOOL CALLBACK DlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam){
+	static int FLAG = 0;//Флаг.По умолчанию 0, если первым пошел человек(крестиками), иначе он станет 1, значит первым пошел комп(крестиками)
 	switch (msg){
 	case WM_CLOSE:
 		EndDialog(hWnd, 0);
@@ -24,36 +34,36 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam){
 	case WM_INITDIALOG:{
 		HMENU MainMenu = LoadMenu(GetModuleHandle(0), MAKEINTRESOURCE(IDR_MENU1));
 		SetMenu(hWnd, MainMenu);
-		HWND hButton;
 		hbmX = LoadBitmap(GetModuleHandle(0), MAKEINTRESOURCE(IDB_BITMAP2));
 		hbmO = LoadBitmap(GetModuleHandle(0), MAKEINTRESOURCE(IDB_BITMAP1));
+		SetFocus(GetDlgItem(hWnd, IDC_RADIO_MEDIUM));
+		SetFocus(GetDlgItem(hWnd, IDC_BUTTON4));
+		DWORD dwError = GetLastError();
+
+		HWND hButton;
 		for (int i = 0; i < 9; ++i){//содержим в массиве состояние кнопок
 			hButton = GetDlgItem(hWnd, (IDC_BUTTON1 + i));
-			CellVector.push_back({hButton, 0});
+			CellVector.push_back({ hButton, 0, 0 });
 		}
 	}	return TRUE;
 	case WM_COMMAND: {
-		LRESULT status = SendMessage(GetDlgItem(hWnd, IDC_CHECK_FIRST_STEP), BM_GETCHECK, 0, 0);
 		for (int i = 0; i < 9; ++i){
-			if (LOWORD(wParam) == (IDC_BUTTON1 + i)){
-				HWND hButton = GetDlgItem(hWnd, (IDC_BUTTON1 + i));
-				SendMessage(hButton, BM_SETIMAGE, WPARAM(IMAGE_BITMAP), LPARAM(hbmX));
-				EnableWindow(hButton, 0);
-
-				for (vector<CELL>::iterator i = CellVector.begin(); i != CellVector.end(); ++i){
-					if (i->hWnd == hButton){
-						i->stat = 1;
-						break;
+			if (LOWORD(wParam) == (IDC_BUTTON1 + i) && HIWORD(wParam) == BN_CLICKED){
+				vector<CELL>::iterator it = (CellVector.begin() + i);
+				if (it->stat == 0){
+					if (FLAG == 1){
+						SendMessage(it->hWnd, BM_SETIMAGE, WPARAM(IMAGE_BITMAP), LPARAM(hbmO));
+						it->sign = 0;
 					}
-				}
-				for (auto x: CellVector){
-					if (x.stat == 0){
-						SendMessage(x.hWnd, BM_SETIMAGE, WPARAM(IMAGE_BITMAP), LPARAM(hbmO));
-						EnableWindow(x.hWnd, 0);
-						x.stat = 1;
-						break;
+					else {
+						SendMessage(it->hWnd, BM_SETIMAGE, WPARAM(IMAGE_BITMAP), LPARAM(hbmX));
+						it->sign = 1;
 					}
+					EnableWindow(it->hWnd, 0);
+					it->stat = 1;
 				}
+				SendMessage(hWnd, AI_STEP, 0, 0);
+				EnableWindow(GetDlgItem(hWnd, IDC_CHECK_FIRST_STEP), 0);
 				break;
 			}
 		}
@@ -63,10 +73,62 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam){
 			if (res == IDYES) EndDialog(hWnd, 0);
 		}break;
 		case IDC_CHECK_FIRST_STEP:{
-			//int res = MessageBox(0, TEXT("Вы уверены?"), TEXT("Выход?"), MB_YESNO | MB_ICONINFORMATION);
+			LRESULT status = SendMessage(GetDlgItem(hWnd, IDC_CHECK_FIRST_STEP), BM_GETCHECK, 0, 0);
+			if (status == BST_CHECKED){
+				wsprintf(szText, TEXT("ИИ делает первый ход"), AI_STEP);
+				SetWindowText(GetDlgItem(hWnd, IDC_STATIC1), szText);
+				FLAG = 1;
+				EnableWindow(GetDlgItem(hWnd, IDC_CHECK_FIRST_STEP), 0);
+				SendMessage(hWnd, AI_STEP, 0, 0);
+			}
+		}break;
+		case ID_NEW_GAME:{
+			for (vector<CELL>::iterator it = CellVector.begin(); it != CellVector.end(); ++it){
+				it->stat = 0;
+				SendMessage(it->hWnd, BM_SETIMAGE, 0, 0);
+				EnableWindow(it->hWnd, 1);
+			}
+			SetWindowText(GetDlgItem(hWnd, IDC_STATIC1), TEXT("Начните новую игру"));
+			EnableWindow(GetDlgItem(hWnd, IDC_CHECK_FIRST_STEP), 1);
+			CheckDlgButton(hWnd, IDC_CHECK_FIRST_STEP, BST_UNCHECKED);
+			FLAG = 0;
 		}break;
 		}
 	} return TRUE;
+	case AI_STEP:{
+		srand(time(NULL));
+		vector<HWND> FreeButtons;//Вектор с хэндлами пока не нажатых кнопок, между ними мы разыграем рулетку
+		vector<HWND>::iterator itFreeButtons;
+		for (vector<CELL>::iterator it = CellVector.begin(); it != CellVector.end(); ++it){
+			if (it->stat == 0) FreeButtons.push_back(it->hWnd);
+		}
+		if (FreeButtons.size() == 0) return TRUE; //если все кнопки нажаты прерываем обработку
+
+		int r = rand() % FreeButtons.size();
+		itFreeButtons = FreeButtons.begin() + r;//в итератор запишется рандомный номер какого-то элемента массива из ненажатых кнопок
+
+		for (vector<CELL>::iterator it = CellVector.begin(); it != CellVector.end(); ++it){
+			if (it->hWnd == (*itFreeButtons)){
+				if (FLAG == 1){
+					SendMessage(it->hWnd, BM_SETIMAGE, WPARAM(IMAGE_BITMAP), LPARAM(hbmX));
+					it->sign = 1;
+				}
+				else {
+					SendMessage(it->hWnd, BM_SETIMAGE, WPARAM(IMAGE_BITMAP), LPARAM(hbmO));
+					it->sign = 0;
+				}
+				EnableWindow(it->hWnd, 0);
+				it->stat = 1;
+				break;
+			}
+		}
+		FreeButtons.clear();
+	} return TRUE;
 	default: return FALSE;
 	}
+}
+
+int Compare(){
+	vector<CELL>::iterator i;
+	return 0;
 }
