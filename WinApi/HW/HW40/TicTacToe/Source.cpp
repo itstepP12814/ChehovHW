@@ -154,7 +154,7 @@ int Compare(HWND hWnd){
 				break;
 			}
 		}
-		it++;
+		it+=3;
 	}
 	it = CellVector.begin();
 	//диагонали
