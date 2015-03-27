@@ -15,7 +15,7 @@ struct CELL{
 };
 
 BOOL CALLBACK DlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-int Compare();
+int Compare(HWND hWnd);
 vector <CELL> CellVector;
 HBITMAP hbmX, hbmO;
 
@@ -62,6 +62,7 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam){
 					EnableWindow(it->hWnd, 0);
 					it->stat = 1;
 				}
+				Compare(hWnd);
 				SendMessage(hWnd, AI_STEP, 0, 0);
 				EnableWindow(GetDlgItem(hWnd, IDC_CHECK_FIRST_STEP), 0);
 				break;
@@ -85,6 +86,7 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam){
 		case ID_NEW_GAME:{
 			for (vector<CELL>::iterator it = CellVector.begin(); it != CellVector.end(); ++it){
 				it->stat = 0;
+				it->sign = 0;
 				SendMessage(it->hWnd, BM_SETIMAGE, 0, 0);
 				EnableWindow(it->hWnd, 1);
 			}
@@ -123,12 +125,52 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam){
 			}
 		}
 		FreeButtons.clear();
+		Compare(hWnd);
 	} return TRUE;
 	default: return FALSE;
 	}
 }
 
-int Compare(){
-	vector<CELL>::iterator i;
+int Compare(HWND hWnd){
+	vector<CELL>::iterator it = CellVector.begin();
+	for (int i = 0; i < 3; ++i){//проверяем столбцы
+		if (it->stat == 1 && (it + 3)->stat == 1 && (it + 6)->stat == 1){
+			if (it->sign == (it + 3)->sign && (it + 3)->sign == (it + 6)->sign){
+				if (it->sign == 1) wsprintf(szText, TEXT("Победили X"));
+				else wsprintf(szText, TEXT("Победили O"));
+				SetWindowText(GetDlgItem(hWnd, IDC_STATIC1), szText);
+				break;
+			}
+		}
+		it++;
+	}
+	it = CellVector.begin();
+	for (int i = 0; i < 3; ++i){//строки
+		if (it->stat == 1 && (it + 1)->stat == 1 && (it + 2)->stat == 1){
+			if (it->sign == (it + 1)->sign && (it + 1)->sign == (it + 2)->sign){
+				if (it->sign == 1) wsprintf(szText, TEXT("Победили X"));
+				else wsprintf(szText, TEXT("Победили O"));
+				SetWindowText(GetDlgItem(hWnd, IDC_STATIC1), szText);
+				break;
+			}
+		}
+		it++;
+	}
+	it = CellVector.begin();
+	//диагонали
+	if (it->stat == 1 && (it + 4)->stat == 1 && (it + 8)->stat == 1){
+		if (it->sign == (it + 4)->sign && (it + 4)->sign == (it + 8)->sign){
+			if (it->sign == 1) wsprintf(szText, TEXT("Победили X"));
+			else wsprintf(szText, TEXT("Победили O"));
+			SetWindowText(GetDlgItem(hWnd, IDC_STATIC1), szText);
+		}
+	}
+	if ((it+2)->stat == 1 && (it + 4)->stat == 1 && (it + 6)->stat == 1){
+		if ((it+2)->sign == (it + 4)->sign && (it + 4)->sign == (it + 6)->sign){
+			if (it->sign == 1) wsprintf(szText, TEXT("Победили X"));
+			else wsprintf(szText, TEXT("Победили O"));
+			SetWindowText(GetDlgItem(hWnd, IDC_STATIC1), szText);
+		}
+	}
 	return 0;
 }
