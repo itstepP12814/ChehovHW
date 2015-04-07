@@ -119,6 +119,27 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		case ID_NEWGAME:{
 			delete game;
 			game = new Model(4, 4);
+			for (size_t i = 0; i < game->height; ++i)
+			{
+				for (size_t j = 0; j < game->width; ++j)
+				{
+					for (it = buttons.begin(); it != buttons.end(); ++it){
+
+						if (it->second.row == i && it->second.col == j){
+							wsprintf(szText, TEXT("%d"), game->field[i][j]);
+							if (game->field[i][j] == game->last){
+								SetWindowText(it->first, NULL);
+								EnableWindow(it->first, 0);
+							}
+							else {
+								EnableWindow(it->first, 1);
+								SetWindowText(it->first, szText);
+							}
+						}
+
+					}
+				}
+			}
 		} break;
 		default: {
 			it = buttons.find((HWND)lParam);
