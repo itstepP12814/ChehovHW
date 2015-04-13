@@ -21,6 +21,18 @@ public:
 		srand(time(NULL));
 		apple = { rand() % height, rand() % width };//Создали яблоко
 	}
+	bool getCellStatus(int i, int j){
+		if (field[i][j]) return true;
+		else return false;
+	}
+	int getHeight(){
+		return height;
+	}
+	int getWidth(){
+		return width;
+	}
+	friend Snake;
+private:
 	int height, width;
 	Cell apple;
 	vector<vector<bool>> field;
@@ -28,7 +40,7 @@ public:
 
 class Snake{
 public:
-	Snake(Field &F_, int l_, int y_, int x_) : snake_long(l_), snake(snake_long, Cell{ 0, 0 }), route(RIGHT), F(F_), snake_speed(150){
+	Snake(Field &Field_, int len_, int y_, int x_) : snake(len_, Cell{ 0, 0 }), route(RIGHT), F(Field_), snake_speed(150){
 		for (vector<Cell>::iterator i = snake.begin(); i != snake.end(); ++i){
 			i->y = y_++;
 			i->x = x_;
@@ -129,11 +141,16 @@ public:
 			F.createApple();
 		}
 	}
-
-	int snake_long;
-	int snake_speed;
-	Route route;
-	vector<Cell> snake;
+	int getSpeed(){
+		return snake_speed;
+	}
+	Route getRoute(){
+		return route;
+	}
+private:
+	int snake_speed;//скорость, поеределяет время работы ф-ции таймера
+	Route route;//направление
+	vector<Cell> snake;//вектор с координатами ячеек, принадлежащих змейке
 	Field& F;//ссылка на поле
 };
 
@@ -157,9 +174,9 @@ void display(){
 
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	for (int i = 0; i < F.height; ++i){//отрисовка точек поля
-		for (int j = 0; j < F.width; ++j){
-			if (F.field[i][j]){
+	for (int i = 0; i < F.getHeight(); ++i){//отрисовка точек поля
+		for (int j = 0; j < F.getWidth(); ++j){
+			if (F.getCellStatus(i, j)){
 				glColor3f(0, 1, 0);
 				glVertex2f(j * 10 + 30, i * 10 + 30);
 			}
@@ -184,7 +201,7 @@ void timer(int = 0){
 	}
 	display();
 
-	switch (S.route){
+	switch (S.getRoute()){
 	case LEFT:
 		S.moveLeft();
 		break;
@@ -199,13 +216,13 @@ void timer(int = 0){
 		break;
 	}
 
-	if (GetAsyncKeyState(VK_LEFT) && S.route != RIGHT) S.moveLeft();
-	if (GetAsyncKeyState(VK_RIGHT) && S.route != LEFT) S.moveRight();
-	if (GetAsyncKeyState(VK_UP) && S.route != DOWN) S.moveUp();
-	if (GetAsyncKeyState(VK_DOWN) && S.route != UP) S.moveDown();
+	if (GetAsyncKeyState(VK_LEFT) && S.getRoute() != RIGHT) S.moveLeft();
+	if (GetAsyncKeyState(VK_RIGHT) && S.getRoute() != LEFT) S.moveRight();
+	if (GetAsyncKeyState(VK_UP) && S.getRoute() != DOWN) S.moveUp();
+	if (GetAsyncKeyState(VK_DOWN) && S.getRoute() != UP) S.moveDown();
 	if (GetAsyncKeyState(27)) exit(0);
 
-	glutTimerFunc(S.snake_speed, timer, 0);
+	glutTimerFunc(S.getSpeed(), timer, 0);
 }
 
 void init(){
@@ -216,7 +233,7 @@ void init(){
 }
 
 int main(int argc, char **argv){
-	HWND hConsole = GetConsoleWindow();//Если компилятор старый заменить на GetForegroundWindow()
+	HWND hConsole = GetConsoleWindow();//скрываем консоль
 	ShowWindow(hConsole, SW_HIDE);
 
 	glutInit(&argc, argv);
