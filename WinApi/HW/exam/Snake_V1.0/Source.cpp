@@ -11,7 +11,7 @@ struct Cell{
 	int x, y;
 };
 
-enum Route { UNDEF, LEFT, RIGHT, UP, DOWN };
+enum Route {LEFT, RIGHT, UP, DOWN };
 
 class Snake;
 class Field{
@@ -47,7 +47,7 @@ public:
 		}
 	}
 
-	bool mark(){
+	bool setPos(){
 		for (int h = 0; h < F.height; ++h){
 			for (int w = 0; w < F.width; ++w){
 				F.field[h][w] = false;
@@ -73,9 +73,6 @@ public:
 		Cell temp = *head, current;
 		head->x = ++(head->x);//сдвинули голову
 		for (vector<Cell>::iterator i = snake.begin() + 1; i != snake.end(); ++i){
-			if (head == i)return false;
-		}
-		for (vector<Cell>::iterator i = snake.begin() + 1; i != snake.end(); ++i){
 			current = *i;
 			*i = temp;
 			temp = current;
@@ -88,9 +85,6 @@ public:
 		vector<Cell>::iterator head = snake.begin();
 		Cell temp = *head, current;
 		head->x = --(head->x);
-		for (vector<Cell>::iterator i = snake.begin() + 1; i != snake.end(); ++i){
-			if (head == i)return false;
-		}
 		for (vector<Cell>::iterator i = snake.begin() + 1; i != snake.end(); ++i){
 			current = *i;
 			*i = temp;
@@ -105,9 +99,6 @@ public:
 		Cell temp = *head, current;
 		head->y = ++(head->y);
 		for (vector<Cell>::iterator i = snake.begin() + 1; i != snake.end(); ++i){
-			if (head == i)return false;
-		}
-		for (vector<Cell>::iterator i = snake.begin() + 1; i != snake.end(); ++i){
 			current = *i;
 			*i = temp;
 			temp = current;
@@ -120,9 +111,6 @@ public:
 		vector<Cell>::iterator head = snake.begin();
 		Cell temp = *head, current;
 		head->y = --(head->y);
-		for (vector<Cell>::iterator i = snake.begin() + 1; i != snake.end(); ++i){
-			if (head == i)return false;
-		}
 		for (vector<Cell>::iterator i = snake.begin() + 1; i != snake.end(); ++i){
 			current = *i;
 			*i = temp;
@@ -195,7 +183,7 @@ void display(){
 }
 
 void timer(int = 0){
-	if (!S.mark()){
+	if (!S.setPos()){
 		MessageBox(NULL, TEXT("Корч :("), TEXT("Snake"), MB_OK);
 		exit(0);
 	}
@@ -226,7 +214,7 @@ void timer(int = 0){
 }
 
 void init(){
-	S.mark();
+	S.setPos();
 	display();
 	F.createApple();
 	timer();
