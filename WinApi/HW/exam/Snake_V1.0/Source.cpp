@@ -7,13 +7,16 @@
 #include <time.h>
 using namespace std;
 
+#define MAX_SPEED 50
+
 struct Cell{
 	int x, y;
 };
 
 enum Route {LEFT, RIGHT, UP, DOWN };
-
+HWND hConsole;
 class Snake;
+
 class Field{
 public:
 	Field(int h_, int w_) :height(h_), width(w_), field(height, vector<bool>(width, false)){}
@@ -62,7 +65,7 @@ public:
 			if (i->x < 0)i->x = F.width - 1;
 
 			if (F.field[i->y][i->x] == false) F.field[i->y][i->x] = true;
-			else return false;
+			//else return false;
 		}
 		F.field[F.apple.x][F.apple.y] = true;
 		return true;
@@ -73,6 +76,7 @@ public:
 		Cell temp = *head, current;
 		head->x = ++(head->x);//сдвинули голову
 		for (vector<Cell>::iterator i = snake.begin() + 1; i != snake.end(); ++i){
+			if (head->x == i->x && head->y == i->y) return false;
 			current = *i;
 			*i = temp;
 			temp = current;
@@ -86,6 +90,7 @@ public:
 		Cell temp = *head, current;
 		head->x = --(head->x);
 		for (vector<Cell>::iterator i = snake.begin() + 1; i != snake.end(); ++i){
+			if (head->x == i->x && head->y == i->y) return false;
 			current = *i;
 			*i = temp;
 			temp = current;
@@ -99,6 +104,7 @@ public:
 		Cell temp = *head, current;
 		head->y = ++(head->y);
 		for (vector<Cell>::iterator i = snake.begin() + 1; i != snake.end(); ++i){
+			if (head->x == i->x && head->y == i->y) return false;
 			current = *i;
 			*i = temp;
 			temp = current;
@@ -112,6 +118,7 @@ public:
 		Cell temp = *head, current;
 		head->y = --(head->y);
 		for (vector<Cell>::iterator i = snake.begin() + 1; i != snake.end(); ++i){
+			if (head->x == i->x && head->y == i->y) return false;
 			current = *i;
 			*i = temp;
 			temp = current;
@@ -123,7 +130,7 @@ public:
 		vector<Cell>::iterator head = snake.begin();
 		if (head->x == F.apple.y && head->y == F.apple.x) {
 			snake.push_back(F.apple);
-			if (snake_speed > 10){
+			if (snake_speed > MAX_SPEED){
 				snake_speed -= 10;
 			}
 			F.createApple();
@@ -144,7 +151,7 @@ private:
 
 
 Field F(35, 45);
-Snake S(F, 1, 7, 8);
+Snake S(F, 3, 7, 8);
 
 
 
@@ -181,26 +188,26 @@ void display(){
 	glFlush();
 	glutSwapBuffers();//смена экранных буферов
 }
-
+void quit(){
+	MessageBox(NULL, TEXT("Корч :("), TEXT("Snake"), MB_OK);
+	exit(0);
+}
 void timer(int = 0){
-	if (!S.setPos()){
-		MessageBox(NULL, TEXT("Корч :("), TEXT("Snake"), MB_OK);
-		exit(0);
-	}
+	S.setPos();
 	display();
 
 	switch (S.getRoute()){
 	case LEFT:
-		S.moveLeft();
+		if (!S.moveLeft()) quit();
 		break;
 	case RIGHT:
-		S.moveRight();
+		if(!S.moveRight()) quit();
 		break;
 	case UP:
-		S.moveUp();
+		if (!S.moveUp()) quit();
 		break;
 	case DOWN:
-		S.moveDown();
+		if (!S.moveDown()) quit();
 		break;
 	}
 
@@ -214,16 +221,15 @@ void timer(int = 0){
 }
 
 void init(){
+	F.createApple();
 	S.setPos();
 	display();
-	F.createApple();
 	timer();
 }
-
 int main(int argc, char **argv){
-	HWND hConsole = GetConsoleWindow();//скрываем консоль
-	ShowWindow(hConsole, SW_HIDE);
-
+	//говорим линкощику что не хотим запускать приложение в консоли, меняем точку вохода.
+	//properties->linler->advanced->EntryPoint: mainCRTStartup
+	// property->linler->system->SubSystem: Windows (/SUBSYSTEM:WINDOWS)	
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
 	glutInitWindowSize(500, 400);
@@ -234,12 +240,8 @@ int main(int argc, char **argv){
 	glViewport(0, 0, 500, 400);
 	gluOrtho2D(0.0, 500.0, 0.0, 400.0);
 	glutDisplayFunc(display);
-
 	init();
-
 	glutMainLoop();
-
-
 
 	return 0;
 }
