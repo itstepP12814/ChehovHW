@@ -283,7 +283,6 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPTSTR lpszCmdLin
 	hInst = (HWND)hInstance;
 	return DialogBox(hInstance, MAKEINTRESOURCE(IDD_DIALOG1), NULL, DlgProc);
 }
-
 BOOL CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	static int new_game_flag = 1;
@@ -292,7 +291,6 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		HMENU MainMenu = LoadMenu(GetModuleHandle(0), MAKEINTRESOURCE(IDR_MENU1));
 		hStatic = GetDlgItem(hWnd, IDC_STATIC1);
 		SetMenu(hWnd, MainMenu);
-		
 	} return TRUE;
 	case WM_CLOSE:{
 		EndDialog(hWnd, 0);
@@ -301,15 +299,13 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		switch (wParam){
 		case ID_NEWGAME:
 			if (new_game_flag){
-				SnakeGameGL.initGame();
 				new_game_flag = 0;
+				SnakeGameGL.initGame();
 			}
 			else {
 				delete S;
 				S = new Snake(F, 3, 7, 8);
-
 			}
-			S = new Snake(F, 3, 7, 8);
 			break;
 		case ID_EXIT:{
 			int res = MessageBox(0, TEXT("Вы уверены"), TEXT("Выход"), MB_YESNO | MB_ICONINFORMATION);
