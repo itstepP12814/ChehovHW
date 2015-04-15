@@ -314,8 +314,7 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		case ID_EXIT:{
 			int res = MessageBox(0, TEXT("Вы уверены"), TEXT("Выход"), MB_YESNO | MB_ICONINFORMATION);
 			if (res == IDYES){
-				EndDialog(hWnd, 0);
-				SnakeGameGL.quit();
+				exit(0);
 			}
 		}break;
 		}
