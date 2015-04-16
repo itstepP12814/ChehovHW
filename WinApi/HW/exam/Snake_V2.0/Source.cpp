@@ -272,7 +272,7 @@ public:
 		}
 	}
 	static void setPointsInDialog(){
-		wsprintf(szText, TEXT("%d ОЧКОВ"), S->getEatenApples());
+		wsprintf(szText, TEXT("ОЧКОВ %d\nСКОРОСТЬ %d"), S->getEatenApples(), S->getSpeed());
 		SetWindowText(hStatic, szText);
 	}
 };
