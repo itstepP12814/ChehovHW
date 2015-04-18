@@ -39,129 +39,135 @@ public:
 	int getWidth(){
 		return width;
 	}
-	friend Snake;
-private:
+	void createSnake(int len_, int y_, int x_){
+		S = new Snake(this, len_, y_, x_);
+	}
+	void deleteSnake(){
+		delete S;
+	}
+	class Snake{
+	public:
+		Snake(Field* Field_, int len_, int y_, int x_) : snake(len_, Cell{ 0, 0 }), start_len(len_),
+			eaten_apple(0), route(RIGHT), F(Field_), snake_speed(150){
+			for (vector<Cell>::iterator i = snake.begin(); i != snake.end(); ++i){
+				i->y = y_++;
+				i->x = x_;
+			}
+		}
+
+		bool setPos(){
+			for (int h = 0; h < F->height; ++h){
+				for (int w = 0; w < F->width; ++w){
+					F->field[h][w] = false;
+				}
+			}
+
+			for (vector<Cell>::iterator i = snake.begin(); i != snake.end(); ++i){
+				//блок проверки, если стукнулись в стенку - выйти с другого конца (мухаха)
+				if (i->y >= F->height) i->y = 0;
+				if (i->y < 0) i->y = F->height - 1;
+				if (i->x >= F->width)	i->x = 0;
+				if (i->x < 0)i->x = F->width - 1;
+
+				if (F->field[i->y][i->x] == false) F->field[i->y][i->x] = true;
+				//else return false;
+			}
+			F->field[F->apple.x][F->apple.y] = true;
+			return true;
+		}
+		bool moveRight(){
+			eatApple();
+			vector<Cell>::iterator head = snake.begin();
+			Cell temp = *head, current;
+			head->x = ++(head->x);//сдвинули голову
+			for (vector<Cell>::iterator i = snake.begin() + 1; i != snake.end(); ++i){
+				if (head->x == i->x && head->y == i->y) return false;
+				current = *i;
+				*i = temp;
+				temp = current;
+			}
+			route = RIGHT;
+			return true;
+		}
+		bool moveLeft(){
+			eatApple();
+			vector<Cell>::iterator head = snake.begin();
+			Cell temp = *head, current;
+			head->x = --(head->x);
+			for (vector<Cell>::iterator i = snake.begin() + 1; i != snake.end(); ++i){
+				if (head->x == i->x && head->y == i->y) return false;
+				current = *i;
+				*i = temp;
+				temp = current;
+			}
+			route = LEFT;
+			return true;
+		}
+		bool moveUp(){
+			eatApple();
+			vector<Cell>::iterator head = snake.begin();
+			Cell temp = *head, current;
+			head->y = ++(head->y);
+			for (vector<Cell>::iterator i = snake.begin() + 1; i != snake.end(); ++i){
+				if (head->x == i->x && head->y == i->y) return false;
+				current = *i;
+				*i = temp;
+				temp = current;
+			}
+			route = UP;
+			return true;
+		}
+		bool moveDown(){
+			eatApple();
+			vector<Cell>::iterator head = snake.begin();
+			Cell temp = *head, current;
+			head->y = --(head->y);
+			for (vector<Cell>::iterator i = snake.begin() + 1; i != snake.end(); ++i){
+				if (head->x == i->x && head->y == i->y) return false;
+				current = *i;
+				*i = temp;
+				temp = current;
+			}
+			route = DOWN;
+			return true;
+		}
+		void eatApple(){
+			vector<Cell>::iterator head = snake.begin();
+			if (head->x == F->apple.y && head->y == F->apple.x) {
+				snake.push_back(F->apple);
+				++eaten_apple;//плюсуем кол-во съеденных яблок
+				if (snake_speed > MAX_SPEED){
+					snake_speed -= 10;
+				}
+				F->createApple();
+			}
+		}
+		int getSpeed(){
+			return snake_speed;
+		}
+		int getEatenApples(){
+			return eaten_apple;
+		}
+		Route getRoute(){
+			return route;
+		}
+	private:
+		int snake_speed;//скорость, поeреопределяет время работы ф-ции таймера
+		int start_len;
+		int eaten_apple;
+		Route route;//направление
+		vector<Cell> snake;//вектор с координатами ячеек, принадлежащих змейке
+		Field* F;//Указатель на поле, который является this для текущего поля внутри которого создается указатель
+		//на змейку
+	};
+	Snake* S;
+protected:
 	int height, width;
 	Cell apple;
 	vector<vector<bool>> field;
 };
-class Snake{
-public:
-	Snake(Field* Field_, int len_, int y_, int x_) : snake(len_, Cell{ 0, 0 }), start_len(len_),
-		eaten_apple(0), route(RIGHT), F(Field_), snake_speed(150){
-		for (vector<Cell>::iterator i = snake.begin(); i != snake.end(); ++i){
-			i->y = y_++;
-			i->x = x_;
-		}
-	}
-
-	bool setPos(){
-		for (int h = 0; h < F->height; ++h){
-			for (int w = 0; w < F->width; ++w){
-				F->field[h][w] = false;
-			}
-		}
-
-		for (vector<Cell>::iterator i = snake.begin(); i != snake.end(); ++i){
-			//блок проверки, если стукнулись в стенку - выйти с другого конца (мухаха)
-			if (i->y >= F->height) i->y = 0;
-			if (i->y < 0) i->y = F->height - 1;
-			if (i->x >= F->width)	i->x = 0;
-			if (i->x < 0)i->x = F->width - 1;
-
-			if (F->field[i->y][i->x] == false) F->field[i->y][i->x] = true;
-			//else return false;
-		}
-		F->field[F->apple.x][F->apple.y] = true;
-		return true;
-	}
-	bool moveRight(){
-		eatApple();
-		vector<Cell>::iterator head = snake.begin();
-		Cell temp = *head, current;
-		head->x = ++(head->x);//сдвинули голову
-		for (vector<Cell>::iterator i = snake.begin() + 1; i != snake.end(); ++i){
-			if (head->x == i->x && head->y == i->y) return false;
-			current = *i;
-			*i = temp;
-			temp = current;
-		}
-		route = RIGHT;
-		return true;
-	}
-	bool moveLeft(){
-		eatApple();
-		vector<Cell>::iterator head = snake.begin();
-		Cell temp = *head, current;
-		head->x = --(head->x);
-		for (vector<Cell>::iterator i = snake.begin() + 1; i != snake.end(); ++i){
-			if (head->x == i->x && head->y == i->y) return false;
-			current = *i;
-			*i = temp;
-			temp = current;
-		}
-		route = LEFT;
-		return true;
-	}
-	bool moveUp(){
-		eatApple();
-		vector<Cell>::iterator head = snake.begin();
-		Cell temp = *head, current;
-		head->y = ++(head->y);
-		for (vector<Cell>::iterator i = snake.begin() + 1; i != snake.end(); ++i){
-			if (head->x == i->x && head->y == i->y) return false;
-			current = *i;
-			*i = temp;
-			temp = current;
-		}
-		route = UP;
-		return true;
-	}
-	bool moveDown(){
-		eatApple();
-		vector<Cell>::iterator head = snake.begin();
-		Cell temp = *head, current;
-		head->y = --(head->y);
-		for (vector<Cell>::iterator i = snake.begin() + 1; i != snake.end(); ++i){
-			if (head->x == i->x && head->y == i->y) return false;
-			current = *i;
-			*i = temp;
-			temp = current;
-		}
-		route = DOWN;
-		return true;
-	}
-	void eatApple(){
-		vector<Cell>::iterator head = snake.begin();
-		if (head->x == F->apple.y && head->y == F->apple.x) {
-			snake.push_back(F->apple);
-			++eaten_apple;//плюсуем кол-во съеденных яблок
-			if (snake_speed > MAX_SPEED){
-				snake_speed -= 10;
-			}
-			F->createApple();
-		}
-	}
-	int getSpeed(){
-		return snake_speed;
-	}
-	int getEatenApples(){
-		return eaten_apple;
-	}
-	Route getRoute(){
-		return route;
-	}
-private:
-	int snake_speed;//скорость, поeреопределяет время работы ф-ции таймера
-	int start_len;
-	int eaten_apple;
-	Route route;//направление
-	vector<Cell> snake;//вектор с координатами ячеек, принадлежащих змейке
-	Field* F;//ссылка на поле
-};
 
 Field* F = new Field(35, 45);
-Snake* S = new Snake(F, 3, 7, 8);
 
 class GL{
 public:
@@ -171,31 +177,31 @@ public:
 		exit(0);
 	}
 	static void timer(int = 0){//таймер для glut
-		S->setPos();
+		F->S->setPos();
 		display();
 		setPointsInDialog();
-		switch (S->getRoute()){
+		switch (F->S->getRoute()){
 		case LEFT:
-			if (!S->moveLeft()) quit();
+			if (!F->S->moveLeft()) quit();
 			break;
 		case RIGHT:
-			if (!S->moveRight()) quit();
+			if (!F->S->moveRight()) quit();
 			break;
 		case UP:
-			if (!S->moveUp()) quit();
+			if (!F->S->moveUp()) quit();
 			break;
 		case DOWN:
-			if (!S->moveDown()) quit();
+			if (!F->S->moveDown()) quit();
 			break;
 		}
 
-		if (GetAsyncKeyState(VK_LEFT) && S->getRoute() != RIGHT) S->moveLeft();
-		if (GetAsyncKeyState(VK_RIGHT) && S->getRoute() != LEFT) S->moveRight();
-		if (GetAsyncKeyState(VK_UP) && S->getRoute() != DOWN) S->moveUp();
-		if (GetAsyncKeyState(VK_DOWN) && S->getRoute() != UP) S->moveDown();
+		if (GetAsyncKeyState(VK_LEFT) && F->S->getRoute() != RIGHT) F->S->moveLeft();
+		if (GetAsyncKeyState(VK_RIGHT) && F->S->getRoute() != LEFT) F->S->moveRight();
+		if (GetAsyncKeyState(VK_UP) && F->S->getRoute() != DOWN) F->S->moveUp();
+		if (GetAsyncKeyState(VK_DOWN) && F->S->getRoute() != UP) F->S->moveDown();
 		if (GetAsyncKeyState(27)) exit(0);
 
-		glutTimerFunc(S->getSpeed(), GL::timer, 0);
+		glutTimerFunc(F->S->getSpeed(), GL::timer, 0);
 	}
 	static void display(){//вывод поля на экран
 		glPointSize(10);//диаметр растровой точки
@@ -230,7 +236,8 @@ public:
 
 	void initGL(){
 		F->createApple();
-		S->setPos();
+		F->createSnake(3, 7, 8);
+		F->S->setPos();
 
 		int menu = glutCreateMenu(processMenuEvents);
 		glutAddMenuEntry("Новая игра", NEWGAME);
@@ -262,8 +269,9 @@ public:
 	static void processMenuEvents(int option){
 		switch (option) {
 		case NEWGAME:{
-			delete S;
-			S = new Snake(F, 3, 7, 8);
+			F->deleteSnake();
+			F->createSnake(3, 7, 8);
+
 		}
 					 break;
 		case EXIT:
@@ -272,7 +280,7 @@ public:
 		}
 	}
 	static void setPointsInDialog(){
-		wsprintf(szText, TEXT("ОЧКОВ %d\nСКОРОСТЬ %d"), S->getEatenApples(), S->getSpeed());
+		wsprintf(szText, TEXT("ОЧКОВ %d\nСКОРОСТЬ %d"), F->S->getEatenApples(), F->S->getSpeed());
 		SetWindowText(hStatic, szText);
 	}
 };
@@ -303,8 +311,8 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				SnakeGameGL.initGame();
 			}
 			else {
-				delete S;
-				S = new Snake(F, 3, 7, 8);
+				F->deleteSnake();
+				F->createSnake(3, 7, 8);
 			}
 			break;
 		case ID_EXIT:{
