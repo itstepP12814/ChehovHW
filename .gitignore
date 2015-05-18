@@ -35,6 +35,8 @@ Desktop.ini
 ################
 ##Windows Visual Stuio
 ################
+Properties/
+*.csproj
 *.sdf
 *.dln
 *.suo
