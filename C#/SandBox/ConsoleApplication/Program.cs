@@ -18,6 +18,7 @@ namespace ConsoleApplication46
             animal.MakeSound();
             Dog dog = new Dog();
             dog.GetName();
+            dog.MakeSound();
         }
     }
 
