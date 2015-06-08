@@ -16,6 +16,7 @@ namespace RaceLib
         protected int milage;
         protected int routeLength;
         public abstract event EventHandler Finish;
+        public abstract string ToString();
         public bool MayMove
         {
             get { return (milage < routeLength) ? true : false; }
@@ -29,6 +30,14 @@ namespace RaceLib
             get { return milage; }
             set { milage = value; }
         }
+        public void SetMilage(int value)
+        {
+            milage = value;
+        }
+        public void SetRouteLenght(int value)
+        {
+            routeLength = value;
+        }
         public int RouteLength
         {
             get { return routeLength; }
@@ -41,7 +50,6 @@ namespace RaceLib
         public Sport()
         {
             carType = CarType.SPORT;
-            milage = 0;
         }
         public override void Move()
         {
@@ -50,6 +58,10 @@ namespace RaceLib
             milage += speed;
             if (milage >= routeLength) Finish(this, EventArgs.Empty);
         }
+        public override string ToString()
+        {
+            return String.Format("Спортивная машина проехала " + milage);
+        }
         public override event EventHandler Finish;
     }
     public class OrdinaryCar : Car
@@ -57,7 +69,6 @@ namespace RaceLib
         public OrdinaryCar()
         {
             carType = CarType.CAR;
-            milage = 0;
         }
         public override void Move()
         {
@@ -67,15 +78,17 @@ namespace RaceLib
             if (milage >= routeLength) Finish(this, EventArgs.Empty);
 
         }
+        public override string ToString()
+        {
+            return String.Format("Легковая машина проехала " + milage);
+        }
         public override event EventHandler Finish;
-
     }
     public class Truck : Car
     {
         public Truck()
         {
             carType = CarType.TRUCK;
-            milage = 0;
         }
         public override void Move()
         {
@@ -85,15 +98,17 @@ namespace RaceLib
             if (milage >= routeLength) Finish(this, EventArgs.Empty);
 
         }
+        public override string ToString()
+        {
+            return String.Format("Грузовая машина проехала " + milage);
+        }
         public override event EventHandler Finish;
-
     }
     public class Bus : Car
     {
         public Bus()
         {
             carType = CarType.BUS;
-            milage = 0;
         }
         public override void Move()
         {
@@ -103,7 +118,10 @@ namespace RaceLib
             if (milage >= routeLength) Finish(this, EventArgs.Empty);
 
         }
+        public override string ToString()
+        {
+            return String.Format("Автобус проехал " + milage);
+        }
         public override event EventHandler Finish;
-
     }
 }
