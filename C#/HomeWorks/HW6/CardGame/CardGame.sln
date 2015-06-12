@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardGame", "CardGame\CardGame.csproj", "{99595A47-0C82-4929-AAE0-F8783F56E7C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardGameLib", "CardGameLib\CardGameLib.csproj", "{2D1FCB95-CC0F-443F-898C-186BF4D3979B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{99595A47-0C82-4929-AAE0-F8783F56E7C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99595A47-0C82-4929-AAE0-F8783F56E7C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99595A47-0C82-4929-AAE0-F8783F56E7C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99595A47-0C82-4929-AAE0-F8783F56E7C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D1FCB95-CC0F-443F-898C-186BF4D3979B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D1FCB95-CC0F-443F-898C-186BF4D3979B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D1FCB95-CC0F-443F-898C-186BF4D3979B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D1FCB95-CC0F-443F-898C-186BF4D3979B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
