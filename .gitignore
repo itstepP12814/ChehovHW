@@ -35,7 +35,6 @@ Desktop.ini
 ################
 ##Windows Visual Stuio
 ################
-Properties/
 *.config
 *.sdf
 *.dln
