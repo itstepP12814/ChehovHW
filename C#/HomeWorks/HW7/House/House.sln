@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "House", "House\House.csproj", "{821B9A90-DB26-4FB0-9BB4-1C7341224F15}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HouseLib", "HouseLib\HouseLib.csproj", "{4F7A58DA-CD30-445D-92C2-329CBBFB0C36}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Loger", "Loger\Loger.csproj", "{F6D16711-B351-4906-AB20-423F04A86710}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4F7A58DA-CD30-445D-92C2-329CBBFB0C36}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4F7A58DA-CD30-445D-92C2-329CBBFB0C36}.Debug|x86.Build.0 = Debug|Any CPU
+		{4F7A58DA-CD30-445D-92C2-329CBBFB0C36}.Release|x86.ActiveCfg = Release|Any CPU
+		{4F7A58DA-CD30-445D-92C2-329CBBFB0C36}.Release|x86.Build.0 = Release|Any CPU
+		{821B9A90-DB26-4FB0-9BB4-1C7341224F15}.Debug|x86.ActiveCfg = Debug|x86
+		{821B9A90-DB26-4FB0-9BB4-1C7341224F15}.Debug|x86.Build.0 = Debug|x86
+		{821B9A90-DB26-4FB0-9BB4-1C7341224F15}.Release|x86.ActiveCfg = Release|x86
+		{821B9A90-DB26-4FB0-9BB4-1C7341224F15}.Release|x86.Build.0 = Release|x86
+		{F6D16711-B351-4906-AB20-423F04A86710}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F6D16711-B351-4906-AB20-423F04A86710}.Debug|x86.Build.0 = Debug|Any CPU
+		{F6D16711-B351-4906-AB20-423F04A86710}.Release|x86.ActiveCfg = Release|Any CPU
+		{F6D16711-B351-4906-AB20-423F04A86710}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = House\House.csproj
+	EndGlobalSection
+EndGlobal
