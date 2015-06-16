@@ -25,9 +25,8 @@ namespace BuildingLib
 	{
 		bool IsWorking { get; }
 
-		string Name { get; }
-
 		string Work (House h);
+
 	}
 	//classes
 	public abstract class Part: IPart

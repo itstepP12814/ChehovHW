@@ -22,16 +22,10 @@ namespace BuildingLib
 				if (!house [i].IsBuilding) {
 					house [i].IsBuilding = true;
 					string str = String.Format ("рабочий построил {0}", house [i].ToString ());
-					Log.WriteLog (new Message (str, this.ToString ()));
 					return str;
 				}
 			}
-			Log.WriteLog (new Message ("рабочий бездельничает", this.ToString ()));
 			return "Рабочий бездельничает\n";
-		}
-
-		public string Name {
-			get { return name; }
 		}
 
 		public bool IsWorking {

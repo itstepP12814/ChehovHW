@@ -25,18 +25,19 @@ namespace BuildingLib
 				}
 			}
 			if (str.Length != 0) {
-				Log.WriteLog (new Message (str, this.ToString ()));
 				return str.ToString ();
 			} else {
 				str.Append ("Ничего не сделано");
-				Log.WriteLog (new Message (str, this.ToString ()));
 				return str.ToString ();
 			}
 		}
 
 		public override string ToString ()
 		{
-			return "TeamLeader";
+			if (name != null)
+				return name;
+			else
+				return "TeamLeader";
 		}
 	}
 }
