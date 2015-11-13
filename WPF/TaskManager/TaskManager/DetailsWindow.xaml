@@ -1,0 +1,39 @@
+﻿<Window x:Class="TaskManager.DetailsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TaskManager"
+        mc:Ignorable="d"
+        Title="DetailsWindow" Height="205.752" Width="343.805">
+   <Window.Resources>
+      <local:MainWindow x:Key="MainResources" />
+   </Window.Resources>
+   <Grid x:Name="gridDetail" DataContext="{DynamicResource MainResources}" >
+      <Grid.RowDefinitions>
+         <RowDefinition />
+         <RowDefinition />
+         <RowDefinition />
+         <RowDefinition />
+         <RowDefinition />
+         <RowDefinition />
+         <RowDefinition />
+      </Grid.RowDefinitions>
+      <Grid.ColumnDefinitions>
+         <ColumnDefinition />
+         <ColumnDefinition Width="2*" />
+      </Grid.ColumnDefinitions>
+      <Label Grid.Row="0" Grid.Column="0" Content="ProcessName" />
+      <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=SelectedProcess.ProcessName, Mode=OneWay}" />
+      <Label Grid.Row="1" Grid.Column="0" Content="Id" />
+      <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Path=SelectedProcess.Id, Mode=OneWay}" />
+      <Label Grid.Row="2" Grid.Column="0" Content="WorkingSet64" />
+      <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Path=SelectedProcess.WorkingSet64, Mode=OneWay}" />
+      <Label Grid.Row="3" Grid.Column="0" Content="TotalProcessorTime" />
+      <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Path=SelectedProcess.TotalProcessorTime, Mode=OneWay}" />
+      <Label Grid.Row="4" Grid.Column="0" Content="StartTime" />
+      <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Path=SelectedProcess.StartTime, Mode=OneWay}" />
+      <Label Grid.Row="5" Grid.Column="0" Content="WindowTitle" />
+      <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Path=SelectedProcess.MainWindowTitle, Mode=OneWay}" />
+   </Grid>
+</Window>
