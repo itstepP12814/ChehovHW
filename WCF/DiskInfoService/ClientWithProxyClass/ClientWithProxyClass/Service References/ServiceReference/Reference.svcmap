@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="422db435-4b65-4b9e-bbae-d2bd9bbf66e0" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost/DiskInfo" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="DiskInfo.xsd" MetadataType="Schema" ID="a569a477-de82-4fb7-b0eb-a261cd328eee" SourceId="1" SourceUrl="http://localhost/DiskInfo?xsd=xsd1" />
+    <MetadataFile FileName="DiskInfo.wsdl" MetadataType="Wsdl" ID="4c167c4b-4588-4c55-bab9-050606aea77d" SourceId="1" SourceUrl="http://localhost/DiskInfo?wsdl" />
+    <MetadataFile FileName="DiskInfo1.xsd" MetadataType="Schema" ID="45f0b12c-ed42-4eff-88a5-070ee28f4ce5" SourceId="1" SourceUrl="http://localhost/DiskInfo?xsd=xsd0" />
+    <MetadataFile FileName="DiskInfo.disco" MetadataType="Disco" ID="5e2875eb-8bcb-43c4-8a2d-98c77fc08187" SourceId="1" SourceUrl="http://localhost/DiskInfo?disco" />
+    <MetadataFile FileName="DiskInfo1.wsdl" MetadataType="Wsdl" ID="14d2382b-8bf1-4573-af21-69834167a97b" SourceId="1" SourceUrl="http://localhost/DiskInfo?wsdl=wsdl0" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

@@ -1,0 +1,68 @@
+﻿<Window
+   x:Class="Chat.MainWindow"
+   Title="MainWindow"
+   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+   xmlns:local="clr-namespace:Chat"
+   Height="444.542"
+   Width="525"
+   mc:Ignorable="d">
+   <StackPanel Margin="0,0,0,2">
+      <DockPanel Height="181">
+         <StackPanel>
+            <Label Content="Ip adress" />
+            <Label Content="LocalPort" />
+            <Label Content="UserName" />
+            <Label Content="ServerIp" />
+            <Label Content="ServerPort" />
+            <Label Content="RemoteUserName" />
+         </StackPanel>
+         <StackPanel>
+            <TextBox
+               Name="textBox2"
+               Text="127.0.0.1" />
+            <Separator Height="4" />
+            <TextBox
+               Name="textBox3"
+               Text="9001" />
+            <Separator Height="4" />
+            <TextBox
+               Name="textBox4"
+               Text="player1" />
+            <Separator Height="4" />
+            <TextBox
+               Name="textBox5"
+               Text="127.0.0.1" />
+            <Separator Height="4" />
+            <TextBox
+               Name="textBox6"
+               Text="88" />
+            <Separator Height="4" />
+            <TextBox
+               Name="textBox7"
+               Text="player2" />
+            <Separator Height="4" />
+            <Button
+               Name="button2"
+               Click="button2_Click"
+               Content="Save" />
+         </StackPanel>
+      </DockPanel>
+      <RichTextBox
+         x:Name="richTextBox1"
+         Height="150"
+         IsReadOnly="True"
+         VerticalScrollBarVisibility="Auto" />
+      <TextBox
+         Name="textBox1"
+         Height="50" />
+      <Button
+         x:Name="button1"
+         Height="22"
+         Click="button1_Click"
+         Content="Send"
+         IsDefault="True" />
+   </StackPanel>
+</Window>
